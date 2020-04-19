@@ -1,0 +1,73 @@
+{
+  "name": "@materya/pulumi",
+  "description": "Set of components and custom resources for pulumi TS SDK",
+  "version": "1.0.0-beta.0",
+  "main": "dist/lib/index.js",
+  "module": "dist/module/index.js",
+  "typings": "dist/types/index.d.ts",
+  "homepage": "https://github.com/materya/pulumi",
+  "url": "https://github.com/materya/pulumi",
+  "email": "richard@materya.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/materya/pulumi.git"
+  },
+  "author": "Richard Kemp <richard@materya.io>",
+  "bugs": {
+    "url": "https://github.com/materya/pulumi/issues"
+  },
+  "license": "GPL-3.0",
+  "keywords": [
+    "typescript",
+    "library",
+    "node",
+    "typedoc",
+    "pulumi",
+    "aws",
+    "gcp",
+    "cert-manager",
+    "cloud",
+    "iac",
+    "k8s",
+    "kubernetes"
+  ],
+  "scripts": {
+    "describe": "npm-scripts-info",
+    "build": "run-p build:*",
+    "build:main": "tsc -p tsconfig.json",
+    "build:module": "tsc -p tsconfig.module.json",
+    "test": "run-s test:*",
+    "test:ts": "tsc -p tsconfig.json --noEmit",
+    "test:lint": "eslint src/**/*.ts",
+    "!test:unit": "jest --no-cache",
+    "release": "standard-version"
+  },
+  "dependencies": {
+    "@pulumi/aws": "^2.0.0",
+    "@pulumi/awsx": "^0.19.2",
+    "@pulumi/eks": "^0.18.24",
+    "@pulumi/gcp": "^3.0.1",
+    "@pulumi/kubernetes": "^2.0.0",
+    "@pulumi/pulumi": "^2.0.0",
+    "@pulumi/random": "^2.0.0",
+    "@types/nunjucks": "^3.1.2",
+    "grpc": "^1.20.2",
+    "nunjucks": "^3.2.1",
+    "typescript": "^3.8.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsdoc": "^22.1.0",
+    "codecov": "^3.1.0",
+    "cross-env": "^5.2.0",
+    "marked": "^0.7.0",
+    "npm-run-all": "^4.1.5",
+    "standard-version": "^7.1.0",
+    "tsutils": "^3.10.0",
+    "typedoc": "^0.17.0"
+  }
+}
