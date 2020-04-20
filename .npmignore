@@ -1,7 +1,9 @@
 src
 test
 tsconfig.*
-tslint.json
+.eslintrc.js
+.editorconfig
+Makefile
 node_modules
 coverage
 .nyc_output
