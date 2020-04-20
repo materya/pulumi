@@ -22,7 +22,7 @@ export class Zone extends pulumi.ComponentResource {
   ) {
     super('materya:aws:Zone', name, {}, opts)
 
-    const { tags, domain = name } = args
+    const { tags, domain = name, records = [] } = args
 
     const zone = new aws.route53.Zone(`${name}-zone`, {
       name: domain,
@@ -30,6 +30,16 @@ export class Zone extends pulumi.ComponentResource {
         ...tags,
       },
     }, { parent: this })
+
+    records.map((record, index) => (
+      new aws.route53.Record(`${name}-record-${index}-${record.type}`, {
+        name: `${record.prefix ? `${record.prefix}.` : ''}${domain}`,
+        records: record.records,
+        ttl: record.ttl,
+        type: record.type,
+        zoneId: zone.zoneId,
+      }, { parent: this })
+    ))
 
     const domainParts = Zone.getDomainParts(domain)
 
