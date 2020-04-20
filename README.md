@@ -5,8 +5,7 @@
 [![Known Vulnerabilities][snyk-image]][snyk-url]
 [![License][license-image]][license-url]
 
-<!-- [![Greenkeeper][greenkeeper-image]][greenkeeper-url]
-[![Build status][travis-image]][travis-url]
+<!-- [![Build status][travis-image]][travis-url]
 [![codecov][codecov-image]][codecov-url] -->
 
 ## Modules
@@ -27,8 +26,6 @@
 
 [npm-image]: https://img.shields.io/npm/v/@materya/pulumi.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/@materya/pulumi
-<!-- [greenkeeper-image]: https://badges.greenkeeper.io/materya/klog.svg?style=flat-square
-[greenkeeper-url]: https://greenkeeper.io/ -->
 [david-image]: https://img.shields.io/david/materya/pulumi.svg?style=flat-square
 [david-url]: https://david-dm.org/materya/pulumi
 [snyk-image]: https://snyk.io/test/github/materya/pulumi/badge.svg?style=flat-square
