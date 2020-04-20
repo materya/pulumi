@@ -1,7 +1,7 @@
 {
   "name": "@materya/pulumi",
   "description": "Set of components and custom resources for pulumi TS SDK",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "main": "dist/lib/index.js",
   "module": "dist/module/index.js",
   "typings": "dist/types/index.d.ts",
