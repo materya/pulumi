@@ -4,7 +4,7 @@
   "version": "1.0.0-beta.2",
   "main": "dist/lib/index.js",
   "module": "dist/module/index.js",
-  "typings": "dist/types/index.d.ts",
+  "typings": "dist/@types/index.d.ts",
   "homepage": "https://github.com/materya/pulumi",
   "url": "https://github.com/materya/pulumi",
   "email": "richard@materya.io",
@@ -34,8 +34,7 @@
   "scripts": {
     "describe": "npm-scripts-info",
     "build": "run-p build:*",
-    "build:main": "tsc -p tsconfig.json",
-    "build:module": "tsc -p tsconfig.module.json",
+    "build:all": "tsc -d",
     "test": "run-s test:*",
     "test:ts": "tsc -p tsconfig.json --noEmit",
     "test:lint": "eslint src/**/*.ts",
