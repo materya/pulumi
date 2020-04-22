@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-beta.4](https://github.com/materya/pulumi/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2020-04-22)
+
+
+### Bug Fixes
+
+* **packaging:** main definition file ([05e2f19](https://github.com/materya/pulumi/commit/05e2f1975f160c59415fe6546c2a82c3251ca057))
+
 ## [1.0.0-beta.3](https://github.com/materya/pulumi/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2020-04-22)
 
 ## [1.0.0-beta.2](https://github.com/materya/pulumi/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2020-04-20)
