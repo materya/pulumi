@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/materya/pulumi/compare/v1.0.0-beta.4...v1.0.0) (2020-04-30)
+
+
+### Features
+
+* add tools module ([3b5a9b6](https://github.com/materya/pulumi/commit/3b5a9b6bb5dde2b48a20fd20a3ea41a656d1ef3d))
+
 ## [1.0.0-beta.4](https://github.com/materya/pulumi/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2020-04-22)
 
 
