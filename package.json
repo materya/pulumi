@@ -3,7 +3,7 @@
   "description": "Set of components and custom resources for pulumi TS SDK",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "typings": "dist/@types/index.d.ts",
+  "types": "dist/@types/index.d.ts",
   "homepage": "https://github.com/materya/pulumi",
   "url": "https://github.com/materya/pulumi",
   "email": "richard@materya.io",
