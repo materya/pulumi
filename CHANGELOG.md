@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0-beta.0](https://github.com/materya/pulumi/compare/v1.0.0...v1.1.0-beta.0) (2020-05-12)
+
+
+### Features
+
+* add gcp & k8s comps from previous project ([0c828d4](https://github.com/materya/pulumi/commit/0c828d4ed81441720d3ba304311f01383cded88e))
+
 ## [1.0.0](https://github.com/materya/pulumi/compare/v1.0.0-beta.4...v1.0.0) (2020-04-30)
 
 
