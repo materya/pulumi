@@ -2,16 +2,14 @@
   "name": "@materya/pulumi",
   "description": "Set of components and custom resources for pulumi TS SDK",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/@types/index.d.ts",
+  "author": "Sylver <sylver@materya.io>",
+  "email": "sylver@materya.io",
   "homepage": "https://github.com/materya/pulumi",
   "url": "https://github.com/materya/pulumi",
-  "email": "richard@materya.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/materya/pulumi.git"
   },
-  "author": "Richard Kemp <richard@materya.io>",
   "bugs": {
     "url": "https://github.com/materya/pulumi/issues"
   },
@@ -30,6 +28,8 @@
     "k8s",
     "kubernetes"
   ],
+  "main": "dist/index.js",
+  "types": "dist/@types/index.d.ts",
   "scripts": {
     "describe": "npm-scripts-info",
     "build": "run-p build:*",

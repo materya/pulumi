@@ -8,7 +8,6 @@ import * as fs from 'fs'
  * @param {string} path - Full file local path.
  */
 
-
 /**
  * Crawl recursively in a given directory, triggering an action for each file.
  *
