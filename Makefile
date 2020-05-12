@@ -2,8 +2,14 @@
 
 PM = npm
 PMCMD = run
+RM = rm
 
-export PRERELEASE_FLAG=beta
+PRERELEASE_TAG ?= beta
+PUBLISH_FLAGS = publish --access public
+
+MODULES = node_modules
+DIST = dist
+COVERAGE = .nyc_output coverag
 
 .PHONY: all
 all: clean dist #test
