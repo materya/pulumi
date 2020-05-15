@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/materya/pulumi/compare/v1.1.0-beta.0...v1.1.0) (2020-05-15)
+
+
+### Features
+
+* **k8s:** add `external-dns` chart provisioning ([04de608](https://github.com/materya/pulumi/commit/04de608a360d919dac46eec6150f4ceb30620fbf))
+* remove tools -> moved to @materya/carbon ([a20a453](https://github.com/materya/pulumi/commit/a20a4535833711517bf83bb246c1252b127f481b))
+* **deps:** updates ([3ba5623](https://github.com/materya/pulumi/commit/3ba56237ffcf35ea02544bb378d03f5465f41faf))
+
+
+### Bug Fixes
+
+* export of main module k8s ([15ec021](https://github.com/materya/pulumi/commit/15ec021f2bb69259dffe8ee53f18fa5ee3670664))
+* **deps:** bump versions ([4d1584f](https://github.com/materya/pulumi/commit/4d1584f94cf9ba9e9a3ddb03951a8975d4a56920))
+* **deps:** vulnerabilities ([3c82196](https://github.com/materya/pulumi/commit/3c821961a3b1458b7d8f73f9aa3f62e93b0ab86c))
+* Makefile missing vars ([3558e23](https://github.com/materya/pulumi/commit/3558e233a7b9be895bc7c116aeea14e88361860d))
+
 ## [1.1.0-beta.0](https://github.com/materya/pulumi/compare/v1.0.0...v1.1.0-beta.0) (2020-05-12)
 
 
