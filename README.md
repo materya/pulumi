@@ -8,6 +8,13 @@
 <!-- [![Build status][travis-image]][travis-url]
 [![codecov][codecov-image]][codecov-url] -->
 
+This is a work-in-progress library of components for Pulumi.
+
+Right now AWS and Kubernetes modules are up-to-date and functional, GCP is outdated and needs some update/cleanup.
+
+Documentation is coming soon.
+
+
 ## Modules
 
 ### AWS
