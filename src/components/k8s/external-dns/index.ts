@@ -44,9 +44,22 @@ export class ExternalDNS extends pulumi.ComponentResource {
       },
     }, { parent: this })
 
-    const deployChart = (
-      awsAssumeRoleArn?: string,
-    ): k8s.helm.v2.Chart => new k8s.helm.v2.Chart(name, {
+    let awsAssumeRole: pulumi.Output<aws.iam.Role>
+
+    if (args.provider === 'aws') {
+      awsAssumeRole = createRole(
+        this,
+        `${name}-role`,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        args.providerArgs!.aws!.oidcIssuer,
+        serviceAccountName,
+        args.serviceRole,
+        args.providerArgs?.aws?.hostedZoneId,
+        namespaceName,
+      )
+    }
+
+    const $chart = new k8s.helm.v2.Chart(name, {
       fetchOpts: {
         repo: 'https://charts.bitnami.com/bitnami',
       },
@@ -57,7 +70,8 @@ export class ExternalDNS extends pulumi.ComponentResource {
         provider: args.provider,
         ...(args.provider === 'aws' && {
           aws: {
-            assumeRoleArn: awsAssumeRoleArn,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            assumeRoleArn: awsAssumeRole!.arn,
             region: aws.config.region,
           },
         }),
@@ -99,23 +113,6 @@ export class ExternalDNS extends pulumi.ComponentResource {
         },
       ],
     }, { parent: this, dependsOn: [namespace] })
-
-    if (args.provider === 'aws') {
-      pulumi.all([createRole(
-        this,
-        `${name}-role`,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        args.providerArgs!.aws!.oidcIssuer,
-        serviceAccountName,
-        args.serviceRole,
-        args.providerArgs?.aws?.hostedZoneId,
-        namespaceName,
-      )]).apply(([role]) => role.arn.apply(roleArn => deployChart(roleArn)))
-    }
-
-    if (args.provider === 'google') {
-      deployChart()
-    }
 
     this.registerOutputs({})
   }

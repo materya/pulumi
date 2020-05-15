@@ -1,10 +1,10 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 
-const createIamPolicy = async (
+const createIamPolicy = (
   hostedZoneId?: string,
-): Promise<aws.iam.GetPolicyDocumentResult> => (
-  aws.iam.getPolicyDocument({
+): pulumi.Output<aws.iam.GetPolicyDocumentResult> => (
+  pulumi.output(aws.iam.getPolicyDocument({
     statements: [
       {
         actions: ['route53:ChangeResourceRecordSets'],
@@ -22,7 +22,7 @@ const createIamPolicy = async (
         resources: ['*'],
       },
     ],
-  })
+  }))
 )
 
 const createAssumeRolePolicy = (
@@ -70,7 +70,7 @@ const createAssumeRolePolicy = (
     })))
 }
 
-const createRole = async (
+const createRole = (
   parent: pulumi.ComponentResource,
   name: string,
   oidcIssuer: string,
@@ -78,9 +78,9 @@ const createRole = async (
   serviceRole: aws.iam.Role,
   hostedZoneId?: string,
   namespace?: string,
-): Promise<pulumi.Output<aws.iam.Role>> => {
-  const policy = await createIamPolicy(hostedZoneId)
-  const assumeRolePolicy = await createAssumeRolePolicy(
+): pulumi.Output<aws.iam.Role> => {
+  const policy = createIamPolicy(hostedZoneId)
+  const assumeRolePolicy = createAssumeRolePolicy(
     oidcIssuer,
     serviceAccountName,
     serviceRole,
