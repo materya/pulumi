@@ -27,8 +27,8 @@ export class ServiceRole extends pulumi.ComponentResource {
     }, { parent: this })
 
     if (args.customPolicy) {
-      const $customPolicy = new aws.iam.RolePolicy(`${name}-role-policy`, {
-        name: `${name}-role-policy`,
+      const $customPolicy = new aws.iam.RolePolicy(`${name}-policy`, {
+        name: `${name}-policy`,
         role,
         policy: args.customPolicy,
       }, { parent: this })
@@ -36,7 +36,7 @@ export class ServiceRole extends pulumi.ComponentResource {
 
     if (args.policies) {
       Object.entries(args.policies).map(([policy, arn]) => (
-        new aws.iam.RolePolicyAttachment(`${name}-${policy}-rpa`, {
+        new aws.iam.RolePolicyAttachment(`${name}-${policy}-attachment`, {
           role,
           policyArn: arn,
         }, { parent: this })
