@@ -5,12 +5,14 @@ import { PostgreSqlUser } from './PostgreSqlUser'
 import { usersGenerator, databasesGenerator } from './generators'
 
 const labels = {
+  component: 'materya',
+  provisioner: 'pulumi',
   tier: 'backend',
   service: 'postgresql',
   type: 'data',
 }
 
-const config: pulumi.Config = new pulumi.Config('postgresql')
+const config: pulumi.Config = new pulumi.Config('k8s:postgresql')
 const password: string | undefined = config.get('password')
 
 export interface PostgreSqlArgs {
@@ -38,7 +40,7 @@ export class PostgreSQL extends pulumi.ComponentResource {
     args: PostgreSqlArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('materya:PostgreSQL', name, {}, opts)
+    super('materya:k8s:PostgreSQL', name, {}, opts)
 
     const users = args.users
       ? usersGenerator({ users: args.users })
@@ -64,51 +66,44 @@ export class PostgreSQL extends pulumi.ComponentResource {
       { parent: this },
     )
 
-    const replicationUser = new PostgreSqlUser(
-      `${name}-user-replication`,
-      {
-        username: 'replication',
-      },
-      { parent: this },
-    )
+    const replicationUser = new PostgreSqlUser(`${name}-user-replication`, {
+      username: 'replication',
+    }, { parent: this })
 
-    const chart = new k8s.helm.v2.Chart(
-      name,
-      {
-        repo: 'stable',
-        version: '3.9.1',
-        chart: 'postgresql',
-        values: {
-          image: {
-            registry: args.image.registry || 'docker.io',
-            repository: args.image.repository || 'bitnami/postgresql',
-            tag: args.image.tag || 'latest',
-          },
-          postgresqlPassword: password || args.password,
-          replication: {
-            enabled: true,
-            user: replicationUser.username,
-            password: replicationUser.password,
-            slaveReplicas: args.slaveReplicas || 1,
-            applicationName: name,
-          },
-          persistence: {
-            size: (args.persistence && args.persistence.size) || '8Gi',
-          },
-          ...(args.nodeSelector && {
-            master: {
-              nodeSelector: args.nodeSelector,
-            },
-            slave: {
-              nodeSelector: args.nodeSelector,
-            },
-          }),
-          initdbScriptsConfigMap: initdbScriptsConfigMap
-            .metadata.apply((m: outputApi.meta.v1.ObjectMeta) => m.name),
+    const chart = new k8s.helm.v2.Chart(`${name}-chart`, {
+      fetchOpts: { repo: 'https://charts.bitnami.com/bitnami' },
+      version: '3.9.1',
+      chart: 'postgresql',
+      values: {
+        image: {
+          registry: args.image.registry || 'docker.io',
+          repository: args.image.repository || 'bitnami/postgresql',
+          tag: args.image.tag || 'latest',
         },
+        postgresqlPassword: password || args.password,
+        replication: {
+          enabled: true,
+          user: replicationUser.username,
+          password: replicationUser.password,
+          slaveReplicas: args.slaveReplicas || 1,
+          applicationName: name,
+        },
+        persistence: {
+          size: (args.persistence && args.persistence.size) || '8Gi',
+        },
+        ...(args.nodeSelector && {
+          master: {
+            nodeSelector: args.nodeSelector,
+          },
+          slave: {
+            nodeSelector: args.nodeSelector,
+          },
+        }),
+        initdbScriptsConfigMap: initdbScriptsConfigMap
+          .metadata.apply((m: outputApi.meta.v1.ObjectMeta) => m.name),
       },
-      { parent: this },
-    )
+    },
+    { parent: this })
 
     this.service = chart.getResourceProperty(
       'v1/Service',

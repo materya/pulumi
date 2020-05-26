@@ -28,7 +28,7 @@ export class PostgreSqlUser extends pulumi.ComponentResource {
     args: PostgreSqlUserArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('materya:PostgreSQL:User', name, {}, opts)
+    super('materya:k8s:PostgreSQL:User', name, {}, opts)
 
     this.username = pulumi.Output.create(args.username)
     this.password = pulumi.Output.create(
