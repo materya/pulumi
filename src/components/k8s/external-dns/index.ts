@@ -6,14 +6,13 @@ import * as pulumi from '@pulumi/pulumi'
 import { createRole } from './aws'
 
 export type ZonePolicy = 'sync' | 'upsert-only'
-export type DnsProvider = 'aws' | 'google' // | 'azure'
 
 export interface ExternalDnsArgs {
   domain: string
   labels: Record<string, string>
   // namespace?: string
   nodeSelector?: {}
-  provider: DnsProvider
+  provider: Materya.CloudProvider
   providerArgs?: {
     aws?: {
       hostedZoneId?: string
@@ -70,7 +69,7 @@ export class ExternalDNS extends pulumi.ComponentResource {
         provider: args.provider,
         ...(args.provider === 'aws' && {
           aws: {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             assumeRoleArn: awsAssumeRole!.arn,
             region: aws.config.region,
           },
