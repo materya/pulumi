@@ -3,7 +3,8 @@ import * as pulumi from '@pulumi/pulumi'
 
 export interface CertificateArgs {
   zoneId: pulumi.Input<string>
-  aliases: Array<string | pulumi.Input<string>>
+  hostname: pulumi.Input<string>
+  aliases?: Array<string | pulumi.Input<string>>
 }
 
 export class Certificate extends pulumi.ComponentResource {
@@ -25,15 +26,11 @@ export class Certificate extends pulumi.ComponentResource {
       region: 'us-east-1',
     }, { parent: this })
 
-    const zone = pulumi.output(args.zoneId).apply(id => aws.route53.getZone({
-      zoneId: id,
-    }, { parent: this, async: true }))
-
     /**
      * Request a new Certificate
      */
     const certificate = new aws.acm.Certificate(`${name}-certificate`, {
-      domainName: zone.name,
+      domainName: args.hostname,
       subjectAlternativeNames: args.aliases,
       validationMethod: 'DNS',
     }, { parent: this, provider: eastRegionProvider })
