@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0-beta.0](https://github.com/materya/pulumi/compare/v1.1.0...v1.2.0-beta.0) (2020-05-26)
+
+
+### Features
+
+* better zone & domains handling ([8ee830b](https://github.com/materya/pulumi/commit/8ee830bf92d05e62f2091d4ae30364f411b3468c))
+* better zone & domains handling, added options ([5864ce9](https://github.com/materya/pulumi/commit/5864ce93fdb3d539f4f825236e2b9efdc2d4c2fa))
+
+
+### Bug Fixes
+
+* better external-dns chart provisioning ([9213dc6](https://github.com/materya/pulumi/commit/9213dc65d8d7ac236e712b52c648c7924c8360a2))
+
 ## [1.1.0](https://github.com/materya/pulumi/compare/v1.1.0-beta.0...v1.1.0) (2020-05-15)
 
 
