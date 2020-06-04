@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://github.com/materya/pulumi/compare/v1.4.0...v1.4.1) (2020-06-04)
+
+
+### Bug Fixes
+
+* **gcp:** Cluster pools default nodeCounts values ([725a688](https://github.com/materya/pulumi/commit/725a6889630be7d95b0998e24b7ee2355e0e0223))
+
 ## [1.4.0](https://github.com/materya/pulumi/compare/v1.3.1...v1.4.0) (2020-06-04)
 
 
