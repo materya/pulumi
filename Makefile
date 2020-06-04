@@ -29,7 +29,7 @@ clean:
 	rm -rf .nyc_output
 
 .PHONY: release
-release: $(DIST)
+release: clean $(DIST)
 ifneq (,$(findstring n,$(MAKEFLAGS)))
 	+$(PM) run release -- --dry-run
 	+$(PM) $(PUBLISH_FLAGS) --dry-run
