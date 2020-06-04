@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/materya/pulumi/compare/v1.3.1...v1.4.0) (2020-06-04)
+
+
+### Features
+
+* **gcp:** add `Zone` component ([d1dc9cf](https://github.com/materya/pulumi/commit/d1dc9cfd9befc9e51cb9d6de46a002161d977c91))
+
 ### [1.3.1](https://github.com/materya/pulumi/compare/v1.3.0...v1.3.1) (2020-06-04)
 
 
