@@ -116,9 +116,9 @@ export class Cluster extends pulumi.ComponentResource {
 
     this.nodePools = args.nodePools.map((pool: NodePool) => {
       const {
-        nodeCount,
+        nodeCount = 1,
         maxNodeCount,
-        minNodeCount,
+        minNodeCount = 1,
         nodeType,
         diskSizeGb,
         labels,
@@ -148,11 +148,11 @@ export class Cluster extends pulumi.ComponentResource {
         {
           cluster: this.cluster.name,
           name: poolId.result.apply(id => `${pool.name}-${id}`),
-          nodeCount: nodeCount || 1,
+          nodeCount,
           ...(maxNodeCount && {
             autoscaling: {
               maxNodeCount,
-              minNodeCount: minNodeCount || 1,
+              minNodeCount,
             },
           }),
           nodeConfig: {
