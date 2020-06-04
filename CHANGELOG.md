@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/materya/pulumi/compare/v1.2.0...v1.3.0) (2020-06-04)
+
+
+### Features
+
+* expose gcp components ([ec6c4f3](https://github.com/materya/pulumi/commit/ec6c4f3cfa55f784bf47a405a0f1e6d39cff069e))
+
+
+### Bug Fixes
+
+* **deps:** upgrade ([b14c203](https://github.com/materya/pulumi/commit/b14c2034ccd093db75adaac09db8a09c40de019d))
+* **deps:** upgrade ([41935ba](https://github.com/materya/pulumi/commit/41935ba5b6f37d0b22fcef32ff734cfc1ae45722))
+
 ## [1.2.0](https://github.com/materya/pulumi/compare/v1.1.0...v1.2.0) (2020-05-26)
 
 
