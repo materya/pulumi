@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/materya/pulumi/compare/v1.3.0...v1.3.1) (2020-06-04)
+
+
+### Bug Fixes
+
+* dist was not rebuild before previous release ([f2fa0ee](https://github.com/materya/pulumi/commit/f2fa0ee05faa4bbd712c768dc933d716a9c2e8dd))
+
 ## [1.3.0](https://github.com/materya/pulumi/compare/v1.2.0...v1.3.0) (2020-06-04)
 
 
