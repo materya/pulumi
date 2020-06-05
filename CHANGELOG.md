@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/materya/pulumi/compare/v1.4.1...v1.5.0) (2020-06-05)
+
+
+### Features
+
+* **k8s/external-dns:** wrong global argument ([4bdf07e](https://github.com/materya/pulumi/commit/4bdf07ebcb9444415fe7a95618a93f38e87cfa55))
+
 ### [1.4.1](https://github.com/materya/pulumi/compare/v1.4.0...v1.4.1) (2020-06-04)
 
 
