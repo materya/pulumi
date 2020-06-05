@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/materya/pulumi/compare/v1.5.0...v1.6.0) (2020-06-05)
+
+
+### Features
+
+* **k8s/cert-manager:** upgrade supported version to 0.15.1 ([03e81f5](https://github.com/materya/pulumi/commit/03e81f57f50b73fd9f07567b5ff84412469e428f))
+* **k8s/Ingress:** make `IngressHost` `port` optional ([6e8f643](https://github.com/materya/pulumi/commit/6e8f643498cdb392b9ab4247992eaa684ecccd3a))
+
 ## [1.5.0](https://github.com/materya/pulumi/compare/v1.4.1...v1.5.0) (2020-06-05)
 
 
