@@ -25,90 +25,55 @@ export class CertManager extends pulumi.ComponentResource {
     const version = args.version || config.version
     const staging = args.staging || config.staging
     const chart = 'cert-manager'
-    const crdsFile = 'https://raw.githubusercontent.com/jetstack/'
-      + `${chart}/v${version}/deploy/manifests/00-crds.yaml`
 
-    const namespace = new k8s.core.v1.Namespace(
+    const namespace = new k8s.core.v1.Namespace(chart, {
+      metadata: {
+        name: chart,
+      },
+    }, { parent: this })
+
+    const certManager = new k8s.helm.v2.Chart(name, {
       chart,
-      {
-        metadata: {
-          name: chart,
+      version,
+      fetchOpts: {
+        repo: 'https://charts.jetstack.io',
+      },
+      namespace: namespace.metadata.apply(m => m.name),
+      values: {
+        ingressShim: {
+          defaultIssuerName: `${name}-issuer`,
+          defaultIssuerKind: 'ClusterIssuer',
         },
+        installCRDs: true,
       },
-      { parent: this },
-    )
+    }, { parent: this })
 
-    const crds = new k8s.yaml.ConfigFile(
-      'crds',
-      {
-        file: crdsFile,
+    this.issuer = new ClusterIssuer(`${name}-issuer`, {
+      metadata: {
+        name: `${name}-issuer`,
       },
-      {
-        parent: this,
-        dependsOn: [
-          namespace,
-        ],
-      },
-    )
-
-    const certManager = new k8s.helm.v2.Chart(
-      name,
-      {
-        chart,
-        version,
-        fetchOpts: {
-          repo: 'https://charts.jetstack.io',
-        },
-        namespace: namespace.metadata.apply(m => m.name),
-        values: {
-          ingressShim: {
-            defaultIssuerName: `${name}-issuer`,
-            defaultIssuerKind: 'ClusterIssuer',
+      spec: {
+        acme: {
+          server: ((args.staging || staging)
+            ? 'https://acme-staging-v02.api.letsencrypt.org/directory'
+            : 'https://acme-v02.api.letsencrypt.org/directory'
+          ),
+          email: args.email,
+          privateKeySecretRef: {
+            name: `${name}-issuer-secret`,
           },
-        },
-      },
-      {
-        parent: this,
-        dependsOn: [
-          namespace,
-          crds,
-        ],
-      },
-    )
-
-    this.issuer = new ClusterIssuer(
-      `${name}-issuer`,
-      {
-        metadata: {
-          name: `${name}-issuer`,
-        },
-        spec: {
-          acme: {
-            server: ((args.staging || staging)
-              ? 'https://acme-staging-v02.api.letsencrypt.org/directory'
-              : 'https://acme-v02.api.letsencrypt.org/directory'
-            ),
-            email: args.email,
-            privateKeySecretRef: {
-              name: `${name}-issuer-secret`,
-            },
-            solvers: [
-              {
-                selector: {},
-                dns01: {
-                  clouddns: {
-                    project: args.project,
-                  },
+          solvers: [
+            {
+              selector: {},
+              dns01: {
+                clouddns: {
+                  project: args.project,
                 },
               },
-            ],
-          },
+            },
+          ],
         },
       },
-      {
-        dependsOn: certManager,
-        parent: this,
-      },
-    )
+    }, { parent: this, dependsOn: certManager })
   }
 }
