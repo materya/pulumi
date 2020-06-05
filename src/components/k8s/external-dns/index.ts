@@ -17,11 +17,11 @@ export interface ExternalDnsArgs {
     aws?: {
       hostedZoneId?: string
       oidcIssuer: string
+      serviceRole: aws.iam.Role
     }
     google?: {}
   }
   serviceAccountName?: string
-  serviceRole: aws.iam.Role
   zonePolicy: ZonePolicy
 }
 
@@ -46,14 +46,18 @@ export class ExternalDNS extends pulumi.ComponentResource {
     let awsAssumeRole: pulumi.Output<aws.iam.Role>
 
     if (args.provider === 'aws') {
+      if (!args.providerArgs?.aws) {
+        throw new Error("with `provider` as 'aws', you must set the `providerArgs.aws` argument.")
+      }
+
       awsAssumeRole = createRole(
         this,
         `${name}-role`,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         args.providerArgs!.aws!.oidcIssuer,
         serviceAccountName,
-        args.serviceRole,
-        args.providerArgs?.aws?.hostedZoneId,
+        args.providerArgs.aws.serviceRole,
+        args.providerArgs.aws.hostedZoneId,
         namespaceName,
       )
     }
