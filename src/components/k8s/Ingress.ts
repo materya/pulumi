@@ -5,7 +5,7 @@ import { CertManager } from './cert-manager'
 export interface IngressHost {
   hostname: pulumi.Input<string>
   serviceName: pulumi.Input<string>
-  port: pulumi.Input<number>
+  port?: pulumi.Input<number>
   isDefault?: boolean
 }
 
@@ -72,7 +72,7 @@ export class Ingress extends pulumi.ComponentResource {
           })),
           rules: args.hosts.reduce(
             (acc: Array<{}>, host): Array<{}> => {
-              const { hostname, port, serviceName, isDefault } = host
+              const { hostname, port = 80, serviceName, isDefault } = host
               return [
                 ...acc,
                 ...(isDefault ? [makeRule({ port,
