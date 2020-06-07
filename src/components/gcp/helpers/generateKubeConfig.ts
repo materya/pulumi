@@ -1,4 +1,4 @@
-export const generateKubeConfig = (
+const generateKubeConfig = (
   context: string,
   certificate: string,
   endpoint: string,
@@ -28,3 +28,5 @@ users:
         token-key: '{.credential.access_token}'
       name: gcp
 `)
+
+export default generateKubeConfig

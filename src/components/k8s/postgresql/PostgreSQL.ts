@@ -17,7 +17,8 @@ const password: string | undefined = config.get('password')
 
 export interface PostgreSqlArgs {
   password?: string
-  nodeSelector?: {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  nodeSelector?: any
   slaveReplicas?: number
   users?: Array<PostgreSqlUser>
   databases?: Array<string>

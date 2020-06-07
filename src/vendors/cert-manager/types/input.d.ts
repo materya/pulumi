@@ -1,5 +1,7 @@
 import * as pulumi from '@pulumi/pulumi'
 import { meta, core } from '@pulumi/kubernetes/types/input'
+
+// eslint-disable-next-line import/prefer-default-export
 export declare namespace certmanager {
   namespace v1alpha2 {
     /**
@@ -95,7 +97,8 @@ export declare namespace certmanager {
 
     interface ServiceSpec extends core.v1.ServiceSpec {
       // TODO: improve acme field definition
-      acme?: any,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      acme?: any
     }
   }
 }

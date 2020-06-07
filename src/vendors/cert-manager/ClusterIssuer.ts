@@ -2,6 +2,7 @@ import * as pulumi from '@pulumi/pulumi'
 import { meta } from '@pulumi/kubernetes/types/output'
 import * as inputApi from './types/input'
 
+// eslint-disable-next-line import/prefer-default-export
 export class ClusterIssuer extends pulumi.CustomResource {
   /**
    * Get the state of an existing `ClusterIssuer` resource,
@@ -12,9 +13,10 @@ export class ClusterIssuer extends pulumi.CustomResource {
    *
    * Pulumi will keep track of this resource using `name` as the Pulumi ID.
    *
-   * @param name _Unique_ name used to register this resource with Pulumi.
-   * @param id An ID for the Kubernetes resource to retrive. Takes the form
-   *  <namespace>/<name> or <name>.
+   * @param {string} name _Unique_ name used to register this resource with Pulumi.
+   * @param {pulumi.Input<pulumi.ID>} id An ID for the Kubernetes resource to retreive. Takes the form <namespace>/<name> or <name>.
+   *
+   * @returns {ClusterIssuer} a ClusterIssuer instance
    */
   public static get (
     name: string,
@@ -57,9 +59,9 @@ export class ClusterIssuer extends pulumi.CustomResource {
    * Create a certmanager.v1alpha2.ClusterIssuer resource with
    * the given unique name, arguments, and options.
    *
-   * @param name The _unique_ name of the resource.
-   * @param args The arguments to use to populate this resource's properties.
-   * @param opts A bag of options that control this resource's behavior.
+   * @param {string} name The _unique_ name of the resource.
+   * @param {inputApi.certmanager.v1alpha2.ClusterIssuer} [args] The arguments to use to populate this resource's properties.
+   * @param {pulumi.CustomResourceOptions} [opts] A bag of options that control this resource's behavior.
    */
   constructor (
     name: string,
@@ -69,9 +71,9 @@ export class ClusterIssuer extends pulumi.CustomResource {
     const inputs = {
       apiVersion: 'cert-manager.io/v1alpha2',
       kind: 'ClusterIssuer',
-      metadata: args && args.metadata || undefined,
-      spec: args && args.spec || undefined,
-      status: args && args.status || undefined,
+      metadata: args?.metadata ?? undefined,
+      spec: args?.spec ?? undefined,
+      status: args?.status ?? undefined,
     }
 
     super(
