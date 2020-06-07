@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/materya/pulumi/compare/v1.6.0...v2.0.0) (2020-06-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* aws iam components refactor
+
+### Features
+
+* aws iam components refactor ([7bd01c4](https://github.com/materya/pulumi/commit/7bd01c46c3f98d4cd1b78451c4c751eea8b8ce79))
+
 ## [1.6.0](https://github.com/materya/pulumi/compare/v1.5.0...v1.6.0) (2020-06-05)
 
 
