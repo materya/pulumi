@@ -16,7 +16,7 @@ export class ServiceRole extends pulumi.ComponentResource {
     args: ServiceRoleArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('materya:aws:ServiceRole', name, {}, opts)
+    super('materya:aws:iam:ServiceRole', name, {}, opts)
 
     const role = new aws.iam.Role(`${name}-role`, {
       name: `${name}-role`,

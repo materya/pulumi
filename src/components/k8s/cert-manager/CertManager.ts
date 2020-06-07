@@ -5,8 +5,9 @@ import { ClusterIssuer } from '../../../vendors/cert-manager'
 import * as config from './config'
 
 export interface CertManagerArgs {
-  project: pulumi.Input<string>
   email: pulumi.Input<string>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  solvers: pulumi.Input<Array<any>>
   staging?: pulumi.Input<boolean>
   repository?: pulumi.Input<string>
   version?: pulumi.Input<string>
@@ -20,7 +21,7 @@ export class CertManager extends pulumi.ComponentResource {
     args: CertManagerArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('materya:CertManager', name, {}, opts)
+    super('materya:k8s:CertManager', name, {}, opts)
 
     const version = args.version || config.version
     const staging = args.staging || config.staging
@@ -62,16 +63,7 @@ export class CertManager extends pulumi.ComponentResource {
           privateKeySecretRef: {
             name: `${name}-issuer-secret`,
           },
-          solvers: [
-            {
-              selector: {},
-              dns01: {
-                clouddns: {
-                  project: args.project,
-                },
-              },
-            },
-          ],
+          solvers: args.solvers,
         },
       },
     }, { parent: this, dependsOn: certManager })

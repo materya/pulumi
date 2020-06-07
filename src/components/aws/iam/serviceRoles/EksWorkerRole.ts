@@ -1,7 +1,7 @@
 import { iam } from '@pulumi/aws'
 import { ComponentResourceOptions } from '@pulumi/pulumi'
 
-import { ServiceRole } from '..'
+import { ServiceRole } from '../ServiceRole'
 
 const EKSWorkerRole = (
   name: string,
@@ -19,4 +19,4 @@ const EKSWorkerRole = (
   return serviceRole.role
 }
 
-export { EKSWorkerRole }
+export default EKSWorkerRole

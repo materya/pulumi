@@ -23,7 +23,7 @@ export interface NodePool {
   minNodeCount?: number
   nodeType: string
   diskSizeGb: number
-  labels?: {}
+  labels?: Record<string, string>
   scopes?: Array<string>
   preemptible?: boolean
 }

@@ -1,19 +1,22 @@
 import * as pulumi from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
-import { CertManager } from './cert-manager'
+import { CertManager, CertManagerArgs } from './cert-manager'
 
 export interface IngressHost {
   hostname: pulumi.Input<string>
   serviceName: pulumi.Input<string>
   port?: pulumi.Input<number>
-  isDefault?: boolean
+  isRoot?: boolean
 }
 
 export interface IngressArgs {
-  certificatesEmail: pulumi.Input<string>
-  project: pulumi.Input<string>
+  customClass?: pulumi.Input<string>
   domain: pulumi.Input<string>
   hosts: Array<IngressHost>
+  tls: {
+    enabled: boolean
+    options?: CertManagerArgs
+  }
 }
 
 interface RuleProps {
@@ -21,7 +24,19 @@ interface RuleProps {
   serviceName: pulumi.Input<string>
   port: pulumi.Input<number>
 }
-const makeRule = ({ host, serviceName, port }: RuleProps): object => ({
+
+export type IngressRule = {
+  host: pulumi.Input<string>
+  http: {
+    paths: Array<{
+      backend: {
+        serviceName: pulumi.Input<string>
+        servicePort: pulumi.Input<number>
+      }
+    }>
+  }
+}
+const makeRule = ({ host, serviceName, port }: RuleProps): IngressRule => ({
   host,
   http: {
     paths: [
@@ -43,53 +58,56 @@ export class Ingress extends pulumi.ComponentResource {
   ) {
     super('materya:k8s:Ingress', name, {}, opts)
 
-    const $certManager = new CertManager(
-      `${name}-certmanager`,
-      {
-        project: args.project,
-        email: args.certificatesEmail,
-      },
-      { parent: this },
-    )
+    if (args.tls.enabled) {
+      if (!args.tls.options) {
+        throw new Error('If `tls` is enabled, provide a `CertManagerArgs`  options object.')
+      }
 
-    const $ingress = new k8s.extensions.v1beta1.Ingress(
-      name,
-      {
-        metadata: {
-          name,
-          annotations: {
-            'dns.alpha.kubernetes.io/external': 'true',
-            'kubernetes.io/tls-acme': 'true',
-          },
-        },
-        spec: {
-          tls: args.hosts.map(({ hostname, isDefault = false }) => ({
-            hosts: [
-              ...(isDefault ? [args.domain] : []),
-              `${hostname}.${args.domain}`,
-            ],
-            secretName: `${name}-${hostname}-tls-secret`,
-          })),
-          rules: args.hosts.reduce(
-            (acc: Array<{}>, host): Array<{}> => {
-              const { hostname, port = 80, serviceName, isDefault } = host
-              return [
-                ...acc,
-                ...(isDefault ? [makeRule({ port,
-                  serviceName,
-                  host: args.domain })] : []),
-                makeRule({
-                  port,
-                  serviceName,
-                  host: `${hostname}.${args.domain}`,
-                }),
-              ]
-            },
-            [],
-          ),
+      const $certManager = new CertManager(
+        `${name}-certmanager`,
+        args.tls.options,
+        { parent: this },
+      )
+    }
+
+    const $ingress = new k8s.extensions.v1beta1.Ingress(name, {
+      metadata: {
+        name,
+        annotations: {
+          'dns.alpha.kubernetes.io/external': 'true', // external-dns
+          'kubernetes.io/tls-acme': 'true', // cert-manager
+          ...(args.customClass && {
+            'kubernetes.io/ingress.class': args.customClass,
+          }),
         },
       },
-      { parent: this },
-    )
+      spec: {
+        tls: args.hosts.map(({ hostname, isRoot = false }) => ({
+          hosts: [
+            ...(isRoot ? [args.domain] : []),
+            `${hostname}.${args.domain}`,
+          ],
+          secretName: `${name}-${hostname}-tls-secret`,
+        })),
+        rules: args.hosts.reduce(
+          (acc: Array<IngressRule>, host): Array<IngressRule> => {
+            const { hostname, port = 80, serviceName, isRoot } = host
+            return [
+              ...acc,
+              ...(isRoot
+                ? [makeRule({ port, serviceName, host: args.domain })]
+                : []
+              ),
+              makeRule({
+                port,
+                serviceName,
+                host: `${hostname}.${args.domain}`,
+              }),
+            ]
+          },
+          [],
+        ),
+      },
+    }, { parent: this })
   }
 }

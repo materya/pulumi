@@ -3,15 +3,15 @@ import * as gcp from '@pulumi/gcp'
 import * as k8s from '@pulumi/kubernetes'
 import * as pulumi from '@pulumi/pulumi'
 
-import { createRole } from './aws'
+import { iam } from '../../aws'
 
 export type ZonePolicy = 'sync' | 'upsert-only'
 
 export interface ExternalDnsArgs {
   domain: string
   labels: Record<string, string>
-  // namespace?: string
-  nodeSelector?: {}
+  namespace?: string
+  nodeSelector?: Record<string, string>
   provider: Materya.CloudProvider
   providerArgs?: {
     aws?: {
@@ -19,7 +19,7 @@ export interface ExternalDnsArgs {
       oidcIssuer: string
       serviceRole: aws.iam.Role
     }
-    google?: {}
+    // google?: {}
   }
   serviceAccountName?: string
   zonePolicy: ZonePolicy
@@ -33,8 +33,7 @@ export class ExternalDNS extends pulumi.ComponentResource {
   ) {
     super('materya:k8s:ExternalDNS', name, {}, opts)
 
-    // const namespace = args.namespace ?? 'default'
-    const namespaceName = 'external-dns'
+    const namespaceName = args.namespace ?? 'external-dns'
     const serviceAccountName = args.serviceAccountName ?? `${name}-sa`
 
     const namespace = new k8s.core.v1.Namespace(`${name}-namespace`, {
@@ -43,23 +42,24 @@ export class ExternalDNS extends pulumi.ComponentResource {
       },
     }, { parent: this })
 
-    let awsAssumeRole: pulumi.Output<aws.iam.Role>
+    let awsAssumeRole: aws.iam.Role
 
     if (args.provider === 'aws') {
       if (!args.providerArgs?.aws) {
         throw new Error("with `provider` as 'aws', you must set the `providerArgs.aws` argument.")
       }
 
-      awsAssumeRole = createRole(
-        this,
-        `${name}-role`,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        args.providerArgs!.aws!.oidcIssuer,
+      const { hostedZoneId, serviceRole, oidcIssuer } = args.providerArgs.aws
+
+      const irsa = new iam.IRSA(`${name}-role`, {
+        namespace: namespaceName,
+        oidcIssuer,
+        policy: iam.policies.ZoneManagerPolicy(hostedZoneId),
         serviceAccountName,
-        args.providerArgs.aws.serviceRole,
-        args.providerArgs.aws.hostedZoneId,
-        namespaceName,
-      )
+        serviceRole,
+      }, { parent: this })
+
+      awsAssumeRole = irsa.role
     }
 
     const $chart = new k8s.helm.v2.Chart(name, {
@@ -73,7 +73,7 @@ export class ExternalDNS extends pulumi.ComponentResource {
         provider: args.provider,
         ...(args.provider === 'aws' && {
           aws: {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             assumeRoleArn: awsAssumeRole!.arn,
             region: aws.config.region,
           },
