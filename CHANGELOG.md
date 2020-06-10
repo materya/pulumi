@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/materya/pulumi/compare/v2.0.0...v2.0.1) (2020-06-10)
+
+
+### Bug Fixes
+
+* **k8s/CertManager:** `ClusterIssuer` deploy dependencies ([3e307be](https://github.com/materya/pulumi/commit/3e307be22039c74dbf3da60b5a80051c80f387db))
+
 ## [2.0.0](https://github.com/materya/pulumi/compare/v1.6.0...v2.0.0) (2020-06-07)
 
 
