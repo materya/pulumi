@@ -8,12 +8,7 @@
 <!-- [![Build status][travis-image]][travis-url]
 [![codecov][codecov-image]][codecov-url] -->
 
-This is a work-in-progress library of components for Pulumi.
-
-Right now AWS and Kubernetes modules are up-to-date and functional, GCP is outdated and needs some update/cleanup.
-
-Documentation is coming soon.
-
+Library of components for [Pulumi](https://www.pulumi.com/).
 
 ## Modules
 
@@ -59,9 +54,5 @@ Documentation is coming soon.
 [david-url]: https://david-dm.org/materya/pulumi
 [snyk-image]: https://snyk.io/test/github/materya/pulumi/badge.svg?style=flat-square
 [snyk-url]: https://app.snyk.io/test/github/materya/pulumi?targetFile=package.json
-<!-- [travis-image]: https://img.shields.io/travis/materya/klog.svg?style=flat-square
-[travis-url]: https://travis-ci.org/materya/klog
-[codecov-image]: https://img.shields.io/codecov/c/github/materya/klog/master.svg?style=flat-square
-[codecov-url]: https://codecov.io/gh/materya/klog -->
 [license-image]: https://img.shields.io/npm/l/@materya/pulumi.svg?style=flat-square
 [license-url]: LICENSE
