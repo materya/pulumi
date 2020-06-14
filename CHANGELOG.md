@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.2](https://github.com/materya/pulumi/compare/v2.0.1...v2.0.2) (2020-06-14)
+
+
+### Bug Fixes
+
+* **deps:** upgrade ([dfbf490](https://github.com/materya/pulumi/commit/dfbf490a00121c90cd4a46cfa6931a042278ad55))
+
 ### [2.0.1](https://github.com/materya/pulumi/compare/v2.0.0...v2.0.1) (2020-06-10)
 
 
