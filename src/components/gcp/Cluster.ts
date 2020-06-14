@@ -30,7 +30,7 @@ export interface NodePool {
 
 export interface ClusterArgs {
   labels: { [name: string]: string }
-  region: string
+  // region?: string
   clusterAdmin: ServiceAccount
   masterAuth: {
     username: string
@@ -100,7 +100,7 @@ export class Cluster extends pulumi.ComponentResource {
         initialNodeCount: 1,
         nodeConfig: {
           labels: {
-            region: args.region,
+            // region: args.region,
             role: 'system',
           },
           machineType: 'g1-small',
