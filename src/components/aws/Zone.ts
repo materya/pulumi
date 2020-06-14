@@ -1,10 +1,10 @@
 import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
-import { ZoneRecord } from './@types/zone'
+import type { Aws } from '@materya/pulumi'
 
 export interface ZoneArgs {
   domain?: string
-  records?: Array<ZoneRecord>
+  records?: Array<Aws.ZoneRecord>
   tags?: { [key: string]: string }
 }
 

@@ -3,6 +3,8 @@ import * as gcp from '@pulumi/gcp'
 import * as k8s from '@pulumi/kubernetes'
 import * as pulumi from '@pulumi/pulumi'
 
+import type { CloudProvider } from '@materya/pulumi'
+
 import { iam } from '../../aws'
 
 export type ZonePolicy = 'sync' | 'upsert-only'
@@ -12,7 +14,7 @@ export interface ExternalDnsArgs {
   labels: Record<string, string>
   namespace?: string
   nodeSelector?: Record<string, string>
-  provider: Materya.CloudProvider
+  provider: CloudProvider
   providerArgs?: {
     aws?: {
       hostedZoneId?: string
