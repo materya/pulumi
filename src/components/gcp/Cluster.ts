@@ -31,6 +31,7 @@ export interface NodePool {
 }
 
 export interface ClusterArgs {
+  clusterArgs?: gcp.container.ClusterArgs
   labels: pulumi.Input<{
     [key: string]: pulumi.Input<string>
   }>
@@ -40,8 +41,8 @@ export interface ClusterArgs {
     password: string
   }
   nodePools: Array<NodePool>
-  masterVersion?: string
-  nodeVersion?: string
+  masterVersion: string
+  nodeVersion: string
 }
 
 export class Cluster extends pulumi.ComponentResource {
@@ -82,8 +83,8 @@ export class Cluster extends pulumi.ComponentResource {
 
     this.cluster = new gcp.container.Cluster(name, {
       name,
-      nodeVersion: args.masterVersion || 'latest',
-      minMasterVersion: args.masterVersion || 'latest',
+      nodeVersion: args.masterVersion,
+      minMasterVersion: args.masterVersion,
       network: this.network.name,
       subnetwork: this.subnet.name,
       masterAuth: args.masterAuth,
@@ -99,6 +100,7 @@ export class Cluster extends pulumi.ComponentResource {
           ...nodeDefaultScopes,
         ],
       },
+      ...args.clusterArgs,
     }, { parent: this })
 
     this.nodePools = args.nodePools.map((pool: NodePool) => {
