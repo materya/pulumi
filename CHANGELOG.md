@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/materya/pulumi/compare/v2.2.0...v2.2.1) (2020-07-05)
+
+
+### Bug Fixes
+
+* **gcp:** Cluster labels typing ([b86469f](https://github.com/materya/pulumi/commit/b86469fa420fd702a52090dfb47c7755f5e49456))
+
 ## [2.2.0](https://github.com/materya/pulumi/compare/v2.0.2...v2.2.0) (2020-07-05)
 
 
