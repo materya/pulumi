@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/materya/pulumi/compare/v2.0.2...v2.2.0) (2020-07-05)
+
+
+### Features
+
+* **gcp:** improve Bucket args ([6eed011](https://github.com/materya/pulumi/commit/6eed011d2131e211a9375837ce7a082e2795fd88))
+
+## [2.1.0](https://github.com/materya/pulumi/compare/v2.0.2...v2.1.0) (2020-07-04)
+
+
+### Features
+
+* **gcp:** improve Bucket args ([6eed011](https://github.com/materya/pulumi/commit/6eed011d2131e211a9375837ce7a082e2795fd88))
+
 ### [2.0.2](https://github.com/materya/pulumi/compare/v2.0.1...v2.0.2) (2020-06-14)
 
 
