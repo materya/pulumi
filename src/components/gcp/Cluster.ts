@@ -23,14 +23,17 @@ export interface NodePool {
   minNodeCount?: number
   nodeType: string
   diskSizeGb: number
-  labels?: Record<string, string>
+  labels?: pulumi.Input<{
+    [key: string]: pulumi.Input<string>
+  }>
   scopes?: Array<string>
   preemptible?: boolean
 }
 
 export interface ClusterArgs {
-  labels: { [name: string]: string }
-  // region?: string
+  labels: pulumi.Input<{
+    [key: string]: pulumi.Input<string>
+  }>
   clusterAdmin: ServiceAccount
   masterAuth: {
     username: string
@@ -65,54 +68,38 @@ export class Cluster extends pulumi.ComponentResource {
 
     this.clusterAdmin = args.clusterAdmin
 
-    this.network = new gcp.compute.Network(
-      `${name}-network`,
-      {
-        // project: gcp.config.project,
-        autoCreateSubnetworks: false,
-      },
-      { parent: this },
-    )
+    this.network = new gcp.compute.Network(`${name}-network`, {
+      autoCreateSubnetworks: false,
+    }, { parent: this })
 
-    this.subnet = new gcp.compute.Subnetwork(
-      `${name}-subnetwork`,
-      {
-        // project: gcp.config.project,
-        // region: gcp.config.region,
-        ipCidrRange: '10.0.0.0/24',
-        network: this.network.name,
-        secondaryIpRanges: [
-          { rangeName: 'pods', ipCidrRange: '10.1.0.0/16' },
+    this.subnet = new gcp.compute.Subnetwork(`${name}-subnetwork`, {
+      ipCidrRange: '10.0.0.0/24',
+      network: this.network.name,
+      secondaryIpRanges: [
+        { rangeName: 'pods', ipCidrRange: '10.1.0.0/16' },
+      ],
+    }, { parent: this })
+
+    this.cluster = new gcp.container.Cluster(name, {
+      name,
+      nodeVersion: args.masterVersion || 'latest',
+      minMasterVersion: args.masterVersion || 'latest',
+      network: this.network.name,
+      subnetwork: this.subnet.name,
+      masterAuth: args.masterAuth,
+      initialNodeCount: 1,
+      nodeConfig: {
+        labels: {
+          role: 'system',
+        },
+        machineType: 'g1-small',
+        diskSizeGb: 10,
+        preemptible: true,
+        oauthScopes: [
+          ...nodeDefaultScopes,
         ],
       },
-      { parent: this },
-    )
-
-    this.cluster = new gcp.container.Cluster(
-      name,
-      {
-        name,
-        nodeVersion: args.masterVersion || 'latest',
-        minMasterVersion: args.masterVersion || 'latest',
-        network: this.network.name,
-        subnetwork: this.subnet.name,
-        masterAuth: args.masterAuth,
-        initialNodeCount: 1,
-        nodeConfig: {
-          labels: {
-            // region: args.region,
-            role: 'system',
-          },
-          machineType: 'g1-small',
-          diskSizeGb: 10,
-          preemptible: true,
-          oauthScopes: [
-            ...nodeDefaultScopes,
-          ],
-        },
-      },
-      { parent: this },
-    )
+    }, { parent: this })
 
     this.nodePools = args.nodePools.map((pool: NodePool) => {
       const {
