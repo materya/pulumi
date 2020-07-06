@@ -51,6 +51,8 @@ const makeRule = ({ host, serviceName, port }: RuleProps): IngressRule => ({
 })
 
 export class Ingress extends pulumi.ComponentResource {
+  public readonly ingress: pulumi.Output<k8s.extensions.v1beta1.Ingress>
+
   constructor (
     name: string,
     args: IngressArgs,
@@ -60,7 +62,7 @@ export class Ingress extends pulumi.ComponentResource {
 
     if (args.tls.enabled) {
       if (!args.tls.options) {
-        throw new Error('If `tls` is enabled, provide a `CertManagerArgs`  options object.')
+        throw new Error('If `tls` is enabled, provide a `CertManagerArgs` options object.')
       }
 
       const $certManager = new CertManager(
@@ -70,44 +72,50 @@ export class Ingress extends pulumi.ComponentResource {
       )
     }
 
-    const $ingress = new k8s.extensions.v1beta1.Ingress(name, {
-      metadata: {
-        name,
-        annotations: {
-          'dns.alpha.kubernetes.io/external': 'true', // external-dns
-          'kubernetes.io/tls-acme': 'true', // cert-manager
-          ...(args.customClass && {
-            'kubernetes.io/ingress.class': args.customClass,
-          }),
-        },
-      },
-      spec: {
-        tls: args.hosts.map(({ hostname, isRoot = false }) => ({
-          hosts: [
-            ...(isRoot ? [args.domain] : []),
-            `${hostname}.${args.domain}`,
-          ],
-          secretName: `${name}-${hostname}-tls-secret`,
-        })),
-        rules: args.hosts.reduce(
-          (acc: Array<IngressRule>, host): Array<IngressRule> => {
-            const { hostname, port = 80, serviceName, isRoot } = host
-            return [
-              ...acc,
-              ...(isRoot
-                ? [makeRule({ port, serviceName, host: args.domain })]
-                : []
-              ),
-              makeRule({
-                port,
-                serviceName,
-                host: `${hostname}.${args.domain}`,
-              }),
-            ]
+    this.ingress = pulumi.output(args.domain).apply(domain => (
+      new k8s.extensions.v1beta1.Ingress(name, {
+        metadata: {
+          name,
+          annotations: {
+            'dns.alpha.kubernetes.io/external': 'true', // external-dns
+            'kubernetes.io/tls-acme': 'true', // cert-manager
+            ...(args.customClass && {
+              'kubernetes.io/ingress.class': args.customClass,
+            }),
           },
-          [],
-        ),
-      },
-    }, { parent: this })
+        },
+        spec: {
+          tls: args.hosts.map(({ hostname, isRoot = false }) => ({
+            hosts: [
+              ...(isRoot ? [domain] : []),
+              `${hostname}.${domain}`,
+            ],
+            secretName: `${name}-${hostname}-tls-secret`,
+          })),
+          rules: args.hosts.reduce(
+            (acc: Array<IngressRule>, host): Array<IngressRule> => {
+              const { hostname, port = 80, serviceName, isRoot } = host
+              return [
+                ...acc,
+                ...(isRoot
+                  ? [makeRule({ port, serviceName, host: domain })]
+                  : []
+                ),
+                makeRule({
+                  port,
+                  serviceName,
+                  host: `${hostname}.${domain}`,
+                }),
+              ]
+            },
+            [],
+          ),
+        },
+      }, { parent: this })
+    ))
+
+    this.registerOutputs({
+      ingress: this.ingress,
+    })
   }
 }
