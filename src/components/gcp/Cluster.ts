@@ -23,9 +23,10 @@ export interface NodePool {
   minNodeCount?: number
   nodeType: string
   diskSizeGb: number
-  labels?: pulumi.Input<{
-    [key: string]: pulumi.Input<string>
-  }>
+  // labels?: pulumi.Input<{
+  //   [key: string]: pulumi.Input<string>
+  // }>
+  labels?: Record<string, string>
   scopes?: Array<string>
   preemptible?: boolean
 }
@@ -132,32 +133,28 @@ export class Cluster extends pulumi.ComponentResource {
         { parent: this },
       )
 
-      return new gcp.container.NodePool(
-        `${name}-pool-${pool.name}`,
-        {
-          cluster: this.cluster.name,
-          name: poolId.result.apply(id => `${pool.name}-${id}`),
-          nodeCount,
-          ...(maxNodeCount && {
-            autoscaling: {
-              maxNodeCount,
-              minNodeCount,
-            },
-          }),
-          nodeConfig: {
-            labels,
-            diskSizeGb,
-            preemptible,
-            machineType: nodeType,
-            oauthScopes: [
-              ...nodeDefaultScopes,
-              ...scopes,
-            ],
+      return new gcp.container.NodePool(`${name}-pool-${pool.name}`, {
+        cluster: this.cluster.name,
+        name: poolId.result.apply(id => `${pool.name}-${id}`),
+        nodeCount,
+        ...(maxNodeCount && {
+          autoscaling: {
+            maxNodeCount,
+            minNodeCount,
           },
-          version: args.nodeVersion || undefined,
+        }),
+        nodeConfig: {
+          labels,
+          diskSizeGb,
+          preemptible,
+          machineType: nodeType,
+          oauthScopes: [
+            ...nodeDefaultScopes,
+            ...scopes,
+          ],
         },
-        { parent: this },
-      )
+        version: args.nodeVersion || undefined,
+      }, { parent: this })
     })
 
     // Generate the cluster kubeconfig
