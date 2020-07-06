@@ -10,8 +10,8 @@ import { iam } from '../../aws'
 export type ZonePolicy = 'sync' | 'upsert-only'
 
 export interface ExternalDnsArgs {
-  domain: string
-  labels: Record<string, string>
+  domain: pulumi.Input<string>
+  labels: pulumi.Input<Record<string, pulumi.Input<string>>>
   namespace?: string
   nodeSelector?: Record<string, string>
   provider: CloudProvider
