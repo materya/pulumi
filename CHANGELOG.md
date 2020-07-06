@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/materya/pulumi/compare/v2.2.1...v2.3.0) (2020-07-06)
+
+
+### Features
+
+* **external-dns:** ensure Input arguments ([b9a2aa6](https://github.com/materya/pulumi/commit/b9a2aa6e9fcb931fe8d35234de00b3179e2ad55e))
+* **k8s.Postgresql:** use postgresql-ha chart ([f07080d](https://github.com/materya/pulumi/commit/f07080db489e3de1f268e3e38e2911ac8b976881))
+
+
+### Bug Fixes
+
+* **cert-manager:** fix dependencies ([ed8df27](https://github.com/materya/pulumi/commit/ed8df27a5a9fd6ad19df85876811a7d7c08d6d7d))
+* **gcp:** Cluster nodes version ([e6a1c94](https://github.com/materya/pulumi/commit/e6a1c94959776ef86f42859f659a94b208427eff))
+* **k8s.Ingress:** handling Input domain ([c1e5b33](https://github.com/materya/pulumi/commit/c1e5b33a8ebc1a98dd19d1199583bf122c7dd8ce))
+
 ### [2.2.1](https://github.com/materya/pulumi/compare/v2.2.0...v2.2.1) (2020-07-05)
 
 
