@@ -1,8 +1,11 @@
 import * as pulumi from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
-import * as outputApi from '@pulumi/kubernetes/types/output'
 import { PostgreSqlUser } from './PostgreSqlUser'
-import { usersGenerator, databasesGenerator } from './generators'
+import {
+  databasesGenerator,
+  pgpoolUsersGenerator,
+  usersGenerator,
+} from './generators'
 
 const labels = {
   component: 'materya',
@@ -12,29 +15,32 @@ const labels = {
   type: 'data',
 }
 
-const config: pulumi.Config = new pulumi.Config('k8s:postgresql')
-const password: string | undefined = config.get('password')
+const config: pulumi.Config = new pulumi.Config('postgresql-ha')
+const adminPassword = config.get('adminPassword')
+const repmgrPassword = config.get('repmgrPassword')
+const diskSize = config.get('diskSize')
 
 export interface PostgreSqlArgs {
-  password?: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  nodeSelector?: any
-  slaveReplicas?: number
   users?: Array<PostgreSqlUser>
   databases?: Array<string>
+  database?: pulumi.Input<string>
+  username?: pulumi.Input<string>
+  password?: pulumi.Input<string>
   initScripts?: { [filename: string]: string }
-  image: {
-    registry?: string
-    repository?: string
-    tag?: string
-  }
-  persistence: {
+  nodeSelector?: pulumi.Input<Record<string, string>>
+  persistence?: {
     size?: string
   }
 }
 
 export class PostgreSQL extends pulumi.ComponentResource {
-  public readonly service: pulumi.Output<outputApi.meta.v1.ObjectMeta>
+  public readonly connectionUrl: string
+
+  public readonly chart: k8s.helm.v2.Chart
+
+  public readonly poolService: pulumi.Output<k8s.core.v1.Service>
+
+  public readonly psqlService: pulumi.Output<k8s.core.v1.Service>
 
   constructor (
     name: string,
@@ -43,6 +49,13 @@ export class PostgreSQL extends pulumi.ComponentResource {
   ) {
     super('materya:k8s:PostgreSQL', name, {}, opts)
 
+    const {
+      database = 'postgres',
+      nodeSelector,
+      username = 'postgres',
+      password = adminPassword,
+    } = args
+
     const users = args.users
       ? usersGenerator({ users: args.users })
       : ''
@@ -50,69 +63,67 @@ export class PostgreSQL extends pulumi.ComponentResource {
       ? databasesGenerator({ databases: args.databases })
       : ''
 
-    const initdbScriptsConfigMap = new k8s.core.v1.ConfigMap(
-      `${name}-initdb-scripts-configmap`,
-      {
-        metadata: { labels },
-        data: {
-          ...args.initScripts,
-          ...(args.databases && {
-            '100_create_databases.sql': databases,
-          }),
-          ...(args.users && {
-            '200_create_users.sql': users,
-          }),
-        },
-      },
-      { parent: this },
-    )
+    const postgresqlInitdbScripts = {
+      ...args.initScripts,
+      ...(args.databases && {
+        '100_create_databases.sql': databases,
+      }),
+      ...(args.users && {
+        '200_create_users.sql': users,
+      }),
+    }
 
-    const replicationUser = new PostgreSqlUser(`${name}-user-replication`, {
-      username: 'replication',
-    }, { parent: this })
+    const pgpoolInitdbScripts = {
+      ...(args.users && {
+        'pgpool_users.sh': pgpoolUsersGenerator({ users: args.users }),
+      }),
+    }
 
-    const chart = new k8s.helm.v2.Chart(`${name}-chart`, {
+    const chart = new k8s.helm.v2.Chart(name, {
       fetchOpts: { repo: 'https://charts.bitnami.com/bitnami' },
-      version: '3.9.1',
-      chart: 'postgresql',
+      version: '3.2.3',
+      chart: 'postgresql-ha',
       values: {
-        image: {
-          registry: args.image.registry || 'docker.io',
-          repository: args.image.repository || 'bitnami/postgresql',
-          tag: args.image.tag || 'latest',
+        fullnameOverride: name,
+        pgpool: {
+          adminPassword,
+          nodeSelector,
+          adminUsername: 'admin',
+          initdbScripts: pgpoolInitdbScripts,
         },
-        postgresqlPassword: password || args.password,
-        replication: {
-          enabled: true,
-          user: replicationUser.username,
-          password: replicationUser.password,
-          slaveReplicas: args.slaveReplicas || 1,
-          applicationName: name,
+        postgresql: {
+          database,
+          labels,
+          nodeSelector,
+          password,
+          repmgrPassword,
+          username,
+          initdbScripts: postgresqlInitdbScripts,
+          postgresPassword: adminPassword,
         },
         persistence: {
-          size: (args.persistence && args.persistence.size) || '8Gi',
+          size: args.persistence?.size ?? diskSize ?? '10Gi',
         },
-        ...(args.nodeSelector && {
-          master: {
-            nodeSelector: args.nodeSelector,
-          },
-          slave: {
-            nodeSelector: args.nodeSelector,
-          },
-        }),
-        initdbScriptsConfigMap: initdbScriptsConfigMap
-          .metadata.apply((m: outputApi.meta.v1.ObjectMeta) => m.name),
       },
-    },
-    { parent: this })
+    }, { parent: this })
 
-    this.service = chart.getResourceProperty(
+    this.psqlService = chart.getResource(
       'v1/Service',
       `${name}-postgresql`,
-      'metadata',
     )
+    this.poolService = chart.getResource(
+      'v1/Service',
+      `${name}-pgpool`,
+    )
+
+    this.chart = chart
+    this.connectionUrl = `postgres://${username}:${password}@${name}-pgpool/postgres`
+
     this.registerOutputs({
-      service: this.service,
+      chart: this.chart,
+      connectionUrl: this.connectionUrl,
+      poolService: this.poolService,
+      psqlService: this.psqlService,
     })
   }
 }
