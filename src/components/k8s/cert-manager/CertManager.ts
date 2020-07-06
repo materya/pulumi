@@ -55,19 +55,26 @@ export class CertManager extends pulumi.ComponentResource {
       },
     }, { parent: this })
 
+    this.service = this.chart.getResource(
+      'v1/Service',
+      `${name}-cert-manager`,
+    )
     this.webhookService = this.chart.getResource(
       'v1/Service',
       `${name}-cert-manager-webhook`,
     )
 
+    const deployment = this.chart.getResource(
+      'apps/v1/Deployment',
+      `${name}-cert-manager`,
+    )
     const webhookDeployment = this.chart.getResource(
       'apps/v1/Deployment',
       `${name}-cert-manager-webhook`,
     )
-
-    this.service = this.chart.getResource(
-      'v1/Service',
-      `${name}-cert-manager`,
+    const cainjectorDeployment = this.chart.getResource(
+      'apps/v1/Deployment',
+      `${name}-cert-manager-cainjector`,
     )
 
     this.issuer = new ClusterIssuer(`${name}-issuer`, {
@@ -93,6 +100,8 @@ export class CertManager extends pulumi.ComponentResource {
         this.chart,
         this.service,
         this.webhookService,
+        deployment,
+        cainjectorDeployment,
         webhookDeployment,
       ],
     })
