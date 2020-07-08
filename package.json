@@ -43,7 +43,7 @@
     "release": "standard-version"
   },
   "dependencies": {
-    "@pulumi/aws": "^2.9.0",
+    "@pulumi/aws": "^2.9.1",
     "@pulumi/awsx": "^0.20.0",
     "@pulumi/eks": "^0.19.2",
     "@pulumi/gcp": "^3.9.0",
