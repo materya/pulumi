@@ -31,89 +31,64 @@ export class ServiceAccount extends pulumi.ComponentResource {
 
     let roles: Array<pulumi.Input<string>> = []
 
-    this.account = new gcp.serviceAccount.Account(
-      this.name,
-      {
-        accountId: args.accountId,
-        displayName: args.displayName || undefined,
-      },
-      { parent: this },
-    )
+    this.account = new gcp.serviceAccount.Account(this.name, {
+      accountId: args.accountId,
+      displayName: args.displayName || undefined,
+    }, { parent: this })
 
     if (args && args.roles) roles = [...roles, ...args.roles]
 
     if (args && args.permissions) {
       const roleId = `custom.${name.replace(/-/g, '_')}`
-      const $customRole = new gcp.projects.IAMCustomRole(
-        `${this.name}-role`,
-        {
-          roleId,
-          title: `${args.displayName || this.name} Custom Role`,
-          project: gcp.config.project,
-          permissions: args.permissions,
-        },
-        { parent: this },
-      )
+      const $customRole = new gcp.projects.IAMCustomRole(`${this.name}-role`, {
+        roleId,
+        title: `${args.displayName || this.name} Custom Role`,
+        project: gcp.config.project,
+        permissions: args.permissions,
+      }, { parent: this })
       roles = [...roles, `projects/${gcp.config.project}/roles/${roleId}`]
     }
 
     const $rolesBinding = roles.map(role => (
-      new gcp.projects.IAMBinding(
-        `${this.name}-binding-${role}`,
-        {
-          role,
-          members: [
-            this.account.email.apply((email: string) => (
-              `serviceAccount:${email}`
-            )),
-          ],
-        },
-        { parent: this },
-      )
+      new gcp.projects.IAMBinding(`${this.name}-binding-${role}`, {
+        role,
+        members: [
+          this.account.email.apply((email: string) => (
+            `serviceAccount:${email}`
+          )),
+        ],
+      }, { parent: this })
     ))
 
-    this.key = new gcp.serviceAccount.Key(
-      `${this.name}-key`,
-      { serviceAccountId: this.account.name },
-      { parent: this },
-    )
+    this.key = new gcp.serviceAccount.Key(`${this.name}-key`, {
+      serviceAccountId: this.account.name,
+    }, { parent: this })
 
     const jsonKey = this.key.privateKey.apply((key: string) => (
       Buffer.from(key, 'base64').toString()
     ))
 
-    this.gcpProvider = new gcp.Provider(
-      `${this.name}-gcp-provider`,
-      {
-        credentials: jsonKey,
-        project: gcp.config.project,
-        region: gcp.config.region,
-        zone: gcp.config.zone,
-      },
-      { parent: this },
-    )
+    this.gcpProvider = new gcp.Provider(`${this.name}-gcp-provider`, {
+      credentials: jsonKey,
+      project: gcp.config.project,
+      region: gcp.config.region,
+      zone: gcp.config.zone,
+    }, { parent: this })
   }
 
   public createK8sAccountKeySecret (args: { provider: k8s.Provider }): void {
     const name = `${this.name}-secret`
-    this.secret = new k8s.core.v1.Secret(
-      name,
-      {
-        data: {
-          privateKey: this.key.privateKey,
-        },
-        metadata: {
-          name: this.name,
-          annotations: {
-            'kubernetes.io/service-account.name': this.name,
-          },
-        },
-        type: 'Opaque',
+    this.secret = new k8s.core.v1.Secret(name, {
+      data: {
+        privateKey: this.key.privateKey,
       },
-      {
-        parent: this,
-        provider: args.provider,
+      metadata: {
+        name: this.name,
+        annotations: {
+          'kubernetes.io/service-account.name': this.name,
+        },
       },
-    )
+      type: 'Opaque',
+    }, { parent: this, provider: args.provider })
   }
 }
