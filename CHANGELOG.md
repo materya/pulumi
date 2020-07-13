@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/materya/pulumi/compare/v2.3.0...v2.4.0) (2020-07-13)
+
+
+### Features
+
+* **k8s.Ingress:** add custom annotations ([81e136f](https://github.com/materya/pulumi/commit/81e136fabdcf86cde06874868d0689b8d7b2f2c1))
+
 ## [2.3.0](https://github.com/materya/pulumi/compare/v2.2.1...v2.3.0) (2020-07-06)
 
 
