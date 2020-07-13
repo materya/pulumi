@@ -10,6 +10,7 @@ export interface IngressHost {
 }
 
 export interface IngressArgs {
+  annotations?: Record<string, string>
   customClass?: pulumi.Input<string>
   domain: pulumi.Input<string>
   hosts: Array<IngressHost>
@@ -82,6 +83,7 @@ export class Ingress extends pulumi.ComponentResource {
             ...(args.customClass && {
               'kubernetes.io/ingress.class': args.customClass,
             }),
+            ...args.annotations,
           },
         },
         spec: {
