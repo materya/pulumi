@@ -48,7 +48,7 @@
     "@pulumi/eks": "^0.19.2",
     "@pulumi/gcp": "^3.9.0",
     "@pulumi/kubernetes": "^2.3.0",
-    "@pulumi/pulumi": "^2.4.0",
+    "@pulumi/pulumi": "^2.5.0",
     "@pulumi/random": "^2.1.2",
     "@types/nunjucks": "^3.1.2",
     "grpc": "^1.24.3",
