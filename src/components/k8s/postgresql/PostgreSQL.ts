@@ -1,11 +1,15 @@
-import * as pulumi from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
+import * as pulumi from '@pulumi/pulumi'
+import * as random from '@pulumi/random'
+
 import { PostgreSqlUser } from './PostgreSqlUser'
 import {
   databasesGenerator,
   pgpoolUsersGenerator,
   usersGenerator,
 } from './generators'
+
+const config: pulumi.Config = new pulumi.Config('postgresql-ha')
 
 const labels = {
   component: 'materya',
@@ -15,28 +19,29 @@ const labels = {
   type: 'data',
 }
 
-const config: pulumi.Config = new pulumi.Config('postgresql-ha')
-const adminPassword = config.get('adminPassword')
-const repmgrPassword = config.get('repmgrPassword')
-const diskSize = config.get('diskSize')
-
 export interface PostgreSqlArgs {
-  users?: Array<PostgreSqlUser>
-  databases?: Array<string>
-  database?: pulumi.Input<string>
-  username?: pulumi.Input<string>
-  password?: pulumi.Input<string>
+  users: Array<PostgreSqlUser>
+  databases: Array<string>
+  adminUsername?: pulumi.Input<string>
+  adminPassword?: pulumi.Input<string>
   initScripts?: { [filename: string]: string }
+  namespace?: string
   nodeSelector?: pulumi.Input<Record<string, string>>
   persistence?: {
     size?: string
   }
+  repmgrPassword?: pulumi.Input<string>
+  version?: '12.3.0' | '11.8.0' | '10.13.0' | '9.6.18'
 }
 
 export class PostgreSQL extends pulumi.ComponentResource {
-  public readonly connectionUrl: string
+  public readonly adminConnectionUrl: string
 
   public readonly chart: k8s.helm.v2.Chart
+
+  public readonly namespace: string
+
+  public readonly poolHost: pulumi.Output<string>
 
   public readonly poolService: pulumi.Output<k8s.core.v1.Service>
 
@@ -49,12 +54,25 @@ export class PostgreSQL extends pulumi.ComponentResource {
   ) {
     super('materya:k8s:PostgreSQL', name, {}, opts)
 
+    let repmgrPassword = args.repmgrPassword ?? config.get('repmgrPassword')
     const {
-      database = 'postgres',
+      namespace = 'default',
       nodeSelector,
-      username = 'postgres',
-      password = adminPassword,
+      adminUsername = 'admin',
+      adminPassword = config.get('adminPassword'),
+      version = '12.3.0',
     } = args
+    const diskSize = args.persistence?.size ?? config.get('repmgrPassword')
+
+    if (!repmgrPassword) {
+      const randomRepmgrPwd = new random.RandomString(`${name}-repmgrPwd`, {
+        length: 32,
+        minNumeric: 6,
+        minUpper: 6,
+        special: false,
+      }, { parent: this })
+      repmgrPassword = randomRepmgrPwd.result
+    }
 
     const users = args.users
       ? usersGenerator({ users: args.users })
@@ -83,23 +101,27 @@ export class PostgreSQL extends pulumi.ComponentResource {
       fetchOpts: { repo: 'https://charts.bitnami.com/bitnami' },
       version: '3.2.3',
       chart: 'postgresql-ha',
+      namespace,
       values: {
         fullnameOverride: name,
         pgpool: {
           adminPassword,
           nodeSelector,
-          adminUsername: 'admin',
+          adminUsername,
           initdbScripts: pgpoolInitdbScripts,
         },
         postgresql: {
-          database,
+          database: 'postgres',
           labels,
           nodeSelector,
-          password,
+          password: adminPassword,
           repmgrPassword,
-          username,
+          username: adminUsername,
           initdbScripts: postgresqlInitdbScripts,
           postgresPassword: adminPassword,
+        },
+        postgresqlImage: {
+          tag: version,
         },
         persistence: {
           size: args.persistence?.size ?? diskSize ?? '10Gi',
@@ -117,13 +139,30 @@ export class PostgreSQL extends pulumi.ComponentResource {
     )
 
     this.chart = chart
-    this.connectionUrl = `postgres://${username}:${password}@${name}-pgpool/postgres`
+
+    this.namespace = namespace
+
+    this.poolHost = pulumi
+      .all([this.poolService.metadata.name])
+      .apply(([poolSvc]) => (`${poolSvc}.${namespace}.svc.cluster.local`))
+
+    this.adminConnectionUrl = `postgres://${adminUsername}:${adminPassword}@${this.poolHost}/postgres`
 
     this.registerOutputs({
+      adminConnectionUrl: this.adminConnectionUrl,
       chart: this.chart,
-      connectionUrl: this.connectionUrl,
+      namespace: this.namespace,
+      poolHost: this.poolHost,
       poolService: this.poolService,
       psqlService: this.psqlService,
     })
+  }
+
+  connectionUrl (user: PostgreSqlUser, dbname: string): pulumi.Output<string> {
+    const { poolHost, namespace } = this
+    return pulumi.all([user.username, user.password])
+      .apply(([username, password]) => (
+        `postgres://${username}:${password}@${poolHost}.${namespace}.svc.cluster.local/${dbname}`
+      ))
   }
 }
