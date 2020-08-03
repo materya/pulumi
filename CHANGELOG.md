@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0-beta.2](https://github.com/materya/pulumi/compare/v2.5.0-beta.1...v2.5.0-beta.2) (2020-08-03)
+
+## [2.5.0-beta.1](https://github.com/materya/pulumi/compare/v2.5.0-beta.0...v2.5.0-beta.1) (2020-08-03)
+
+## [2.5.0-beta.0](https://github.com/materya/pulumi/compare/v2.4.0...v2.5.0-beta.0) (2020-08-03)
+
+
+### Features
+
+* **k8s/postgresql:** improve component ([3227c88](https://github.com/materya/pulumi/commit/3227c88bdea6796ddbbf39b3a8b48d80a8a79351))
+
+
+### Bug Fixes
+
+* **deps:** vulnerabilities ([416dbb1](https://github.com/materya/pulumi/commit/416dbb1535e088c0f516ba75875799706dca13ec))
+
 ## [2.4.0](https://github.com/materya/pulumi/compare/v2.3.0...v2.4.0) (2020-07-13)
 
 
