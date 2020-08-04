@@ -8,6 +8,7 @@ export interface PostgreSqlUserArgs {
   isAdmin?: boolean
   tables?: Array<string>
   permissions?: Array<string>
+  customGrants?: Array<string>
 }
 
 export class PostgreSqlUser extends pulumi.ComponentResource {
@@ -22,6 +23,8 @@ export class PostgreSqlUser extends pulumi.ComponentResource {
   public readonly tables?: Array<string>
 
   public readonly permissions: Array<string>
+
+  public readonly customGrants?: Array<string>
 
   constructor (
     name: string,
@@ -52,5 +55,6 @@ export class PostgreSqlUser extends pulumi.ComponentResource {
     this.isAdmin = pulumi.Output.create(args.isAdmin || false)
     this.tables = args.tables || undefined
     this.permissions = args.permissions || ['ALL PRIVILEGES']
+    this.customGrants = args.customGrants
   }
 }

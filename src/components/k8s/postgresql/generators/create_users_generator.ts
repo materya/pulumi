@@ -36,12 +36,15 @@ const generator: UserGenerator = args => (
           TO ${username};
         `
 
+        const customGrants = user.customGrants && user.customGrants.join(';')
+
         return `${script}
           CREATE USER ${username} WITH PASSWORD '${password}';
 
           ${database ? `\\c ${database}
             ${grantAccess}
             ${user.permissions ? grantPermissions : ''}` : ''}
+          ${customGrants || ''}
         `.replace(/^\s+$/gm, '')
       })
   ), '')
