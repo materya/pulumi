@@ -6,37 +6,41 @@ type UserGenerator = (args: {
   users: Array<PostgreSqlUser>
 }) => Output<string> | string
 
+// eslint-disable indent
 const generator: UserGenerator = args => (
-  args.users.reduce(
-    (concatScript: pulumi.Output<string> | string, user) => (
-      pulumi
-        .all([
-          concatScript,
-          user.username,
-          user.password,
-          user.database,
-          user.isAdmin,
-        ])
-        .apply(([script, username, password, database, isAdmin]) => (
-          `${script}
+  args.users.reduce((concatScript: pulumi.Output<string> | string, user) => (
+    pulumi
+      .all([
+        concatScript,
+        user.username,
+        user.password,
+        user.database,
+        user.isAdmin,
+      ])
+      .apply(([script, username, password, database, isAdmin]) => {
+        const grantAccess = `
+          GRANT ${isAdmin ? 'ALL PRIVILEGES' : 'CONNECT'}
+          ON DATABASE ${database}
+          TO ${username};
+        `
+
+        const grantPermissions = `
+          GRANT ${user.permissions.join(', ')}
+          ON ${user.tables ? user.tables.join(', ') : 'ALL TABLES'}
+          IN SCHEMA public
+          TO ${username};
+        `
+
+        return `${script}
           CREATE USER ${username} WITH PASSWORD '${password}';
-          ${database
-            ? `\\c ${database};
-              GRANT ${isAdmin ? 'ALL PRIVILEGES' : 'CONNECT'}
-                ON DATABASE ${database}
-                TO ${username};
-              ${user.tables
-            ? `GRANT ${user.permissions.join(', ')}
-                  ON ${user.tables.join(', ')} IN SCHEMA public
-                  TO ${username};`
-            : ''
-          }`
-            : ''
-          }`.replace(/^\s+$/gm, '')
-        ))
-    ),
-    '',
-  )
+
+          ${database ? `
+            \\c ${database}
+            ${grantAccess}
+            ${user.permissions ? grantPermissions : ''}` : ''}
+          `.replace(/^\s+$/gm, '')
+      })
+  ), '')
 )
 
 export default generator
