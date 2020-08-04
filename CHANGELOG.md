@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0-beta.0](https://github.com/materya/pulumi/compare/v2.6.0...v2.7.0-beta.0) (2020-08-04)
+
+
+### Features
+
+* **k8s/postgresql:** add custom grants for users ([39683a3](https://github.com/materya/pulumi/commit/39683a3edc4bc3037a87d56643d455817f9f197c))
+
 ## [2.6.0](https://github.com/materya/pulumi/compare/v2.5.0...v2.6.0) (2020-08-04)
 
 
