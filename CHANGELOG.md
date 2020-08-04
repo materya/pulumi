@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0-beta.0](https://github.com/materya/pulumi/compare/v2.5.0...v2.6.0-beta.0) (2020-08-04)
+
+
+### Features
+
+* **k8s/postgresql:** improve user creation ([97337af](https://github.com/materya/pulumi/commit/97337af89c67e076374b38f6932f358f449dbfcd))
+
 ## [2.5.0](https://github.com/materya/pulumi/compare/v2.4.0...v2.5.0) (2020-08-03)
 
 
