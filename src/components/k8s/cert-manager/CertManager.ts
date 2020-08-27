@@ -8,6 +8,7 @@ export interface CertManagerArgs {
   email: pulumi.Input<string>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   solvers: pulumi.Input<Array<any>>
+  chartOverrides?: pulumi.Inputs
   staging?: pulumi.Input<boolean>
   repository?: pulumi.Input<string>
   version?: pulumi.Input<string>
@@ -52,6 +53,7 @@ export class CertManager extends pulumi.ComponentResource {
           defaultIssuerKind: 'ClusterIssuer',
         },
         installCRDs: true,
+        ...args.chartOverrides,
       },
     }, { parent: this })
 
