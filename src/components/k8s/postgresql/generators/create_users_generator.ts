@@ -34,6 +34,9 @@ const generator: UserGenerator = args => (
           ALTER DEFAULT PRIVILEGES IN SCHEMA public
           GRANT ${user.permissions.join(', ')} ON TABLES
           TO ${username};
+          ALTER DEFAULT PRIVILEGES IN SCHEMA public
+          GRANT USAGE, SELECT ON SEQUENCES
+          TO ${username};
         `
 
         const customGrants = user.customGrants && user.customGrants.join(';')
