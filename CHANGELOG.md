@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/materya/pulumi/compare/v2.7.0-beta.0...v2.7.0) (2020-08-27)
+
+
+### Features
+
+* **aws:** Certificate with several aws auth possibilities ([443c336](https://github.com/materya/pulumi/commit/443c33603776e348bf3421284aab0ea8a63b33f8))
+* **cert-manager:** provide an options override param ([9170c67](https://github.com/materya/pulumi/commit/9170c67241a060e072125a1cd68f2d0f9ed1474f))
+* **psql:** extend psql user grants ([26ebcba](https://github.com/materya/pulumi/commit/26ebcba2c1a199761d8f728b8bd91be81cc679af))
+
+
+### Bug Fixes
+
+* **deps:** vulnerabilities & upgrade ([721df46](https://github.com/materya/pulumi/commit/721df4690a745f857997ede890622be17199ab0e))
+
 ## [2.7.0-beta.0](https://github.com/materya/pulumi/compare/v2.6.0...v2.7.0-beta.0) (2020-08-04)
 
 
