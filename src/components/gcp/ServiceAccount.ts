@@ -12,9 +12,9 @@ export interface ServiceAccountArgs {
 export class ServiceAccount extends pulumi.ComponentResource {
   public readonly gcpProvider: gcp.Provider
 
-  public readonly account: gcp.serviceAccount.Account
+  public readonly account: gcp.serviceaccount.Account
 
-  public readonly key: gcp.serviceAccount.Key
+  public readonly key: gcp.serviceaccount.Key
 
   public secret?: k8s.core.v1.Secret
 
@@ -31,7 +31,7 @@ export class ServiceAccount extends pulumi.ComponentResource {
 
     let roles: Array<pulumi.Input<string>> = []
 
-    this.account = new gcp.serviceAccount.Account(this.name, {
+    this.account = new gcp.serviceaccount.Account(this.name, {
       accountId: args.accountId,
       displayName: args.displayName || undefined,
     }, { parent: this })
@@ -60,7 +60,7 @@ export class ServiceAccount extends pulumi.ComponentResource {
       }, { parent: this })
     ))
 
-    this.key = new gcp.serviceAccount.Key(`${this.name}-key`, {
+    this.key = new gcp.serviceaccount.Key(`${this.name}-key`, {
       serviceAccountId: this.account.name,
     }, { parent: this })
 
