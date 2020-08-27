@@ -21,8 +21,14 @@ export class Certificate extends pulumi.ComponentResource {
      * Custom Provider.
      * Per AWS, ACM certificate must be in the us-east-1 region.
      */
-    const eastRegionProvider = new aws.Provider('east-region-provider', {
-      profile: aws.config.profile,
+    const eastRegionProvider = new aws.Provider(`${name}-us-east-provider`, {
+      ...(aws.config.profile && {
+        profile: aws.config.profile,
+      }),
+      ...(aws.config.accessKey && aws.config.secretKey && {
+        accessKey: aws.config.accessKey,
+        secretKey: aws.config.secretKey,
+      }),
       region: 'us-east-1',
     }, { parent: this })
 
