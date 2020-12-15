@@ -55,16 +55,17 @@ export class PostgreSQL extends pulumi.ComponentResource {
   ) {
     super('materya:k8s:PostgreSQL', name, {}, opts)
 
-    let repmgrPassword = args.repmgrPassword ?? config.get('repmgrPassword')
+    let repmgrPassword = args.repmgrPassword
+      ?? config.getSecret('repmgrPassword')
     const {
       namespace = 'default',
       nodeSelector,
       adminUsername = 'postgres',
-      adminPassword = config.get('adminPassword'),
+      adminPassword = config.getSecret('adminPassword'),
       version = '12.3.0',
       chartVersion = '6.2.3',
     } = args
-    const diskSize = args.persistence?.size ?? config.get('repmgrPassword')
+    const diskSize = args.persistence?.size ?? config.get('diskSize')
 
     if (!repmgrPassword) {
       const randomRepmgrPwd = new random.RandomString(`${name}-repmgrPwd`, {
@@ -126,7 +127,7 @@ export class PostgreSQL extends pulumi.ComponentResource {
           tag: version,
         },
         persistence: {
-          size: args.persistence?.size ?? diskSize ?? '10Gi',
+          size: diskSize ?? '10Gi',
         },
       },
     }, { parent: this })
