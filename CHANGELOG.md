@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/materya/pulumi/compare/v3.0.0...v3.0.1) (2020-12-15)
+
+
+### Bug Fixes
+
+* **postgresql:** wrong config getters ([eb6f7ed](https://github.com/materya/pulumi/commit/eb6f7edbc0fdcf49a4357cbad6eec13a570848e5))
+
 ## [3.0.0](https://github.com/materya/pulumi/compare/v2.7.0...v3.0.0) (2020-12-15)
 
 
