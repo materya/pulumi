@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/materya/pulumi/compare/v2.7.0...v3.0.0) (2020-12-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **postgresql:** upgrade postgresql-ha chart to 6.2.3
+
+### Features
+
+* **postgresql:** add a `chartVersion` parameter for fine grained deployment ([94ca21e](https://github.com/materya/pulumi/commit/94ca21eb1cd73defab85cc791b5644e2ca4d5dff))
+* **postgresql:** upgrade postgresql-ha chart to 6.2.3 ([78806bf](https://github.com/materya/pulumi/commit/78806bf6052e282615689f69fc4f2a12db1d6319))
+
+
+### Bug Fixes
+
+* **deps:** vulnerabilites ([af6ab8e](https://github.com/materya/pulumi/commit/af6ab8eed93a63c064e1e3e3d9ee41d8de7f369c))
+* **gcp.ServiceAccount:** spec definitions ([655fa3b](https://github.com/materya/pulumi/commit/655fa3b99bcb0c3615a1f27d337f63e4fdd5cfef))
+
 ## [2.7.0](https://github.com/materya/pulumi/compare/v2.7.0-beta.0...v2.7.0) (2020-08-27)
 
 
