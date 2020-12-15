@@ -32,6 +32,7 @@ export interface PostgreSqlArgs {
   }
   repmgrPassword?: pulumi.Input<string>
   version?: '12.3.0' | '11.8.0' | '10.13.0' | '9.6.18'
+  chartVersion?: string
 }
 
 export class PostgreSQL extends pulumi.ComponentResource {
@@ -61,6 +62,7 @@ export class PostgreSQL extends pulumi.ComponentResource {
       adminUsername = 'postgres',
       adminPassword = config.get('adminPassword'),
       version = '12.3.0',
+      chartVersion = '6.2.3',
     } = args
     const diskSize = args.persistence?.size ?? config.get('repmgrPassword')
 
@@ -99,7 +101,7 @@ export class PostgreSQL extends pulumi.ComponentResource {
 
     const chart = new k8s.helm.v2.Chart(name, {
       fetchOpts: { repo: 'https://charts.bitnami.com/bitnami' },
-      version: '6.2.3',
+      version: chartVersion,
       chart: 'postgresql-ha',
       namespace,
       values: {
