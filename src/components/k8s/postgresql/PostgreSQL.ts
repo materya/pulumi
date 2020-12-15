@@ -99,7 +99,7 @@ export class PostgreSQL extends pulumi.ComponentResource {
 
     const chart = new k8s.helm.v2.Chart(name, {
       fetchOpts: { repo: 'https://charts.bitnami.com/bitnami' },
-      version: '3.2.3',
+      version: '6.2.3',
       chart: 'postgresql-ha',
       namespace,
       values: {
