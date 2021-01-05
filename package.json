@@ -68,6 +68,6 @@
     "snyk": "^1.385.0",
     "standard-version": "^9.0.0",
     "tsutils": "^3.10.0",
-    "typedoc": "^0.17.8"
+    "typedoc": "^0.20.12"
   }
 }
