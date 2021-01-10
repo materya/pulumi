@@ -16,6 +16,13 @@ export declare namespace certmanager {
      * More info:
      * https://cert-manager.readthedocs.io/en/latest/reference/clusterissuers.html
      */
+
+    interface ServiceSpec extends core.v1.ServiceSpec {
+      // TODO: improve acme field definition
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      acme?: any
+    }
+
     interface ClusterIssuer {
       /**
        * APIVersion defines the versioned schema of this representation of an
@@ -93,12 +100,6 @@ export declare namespace certmanager {
        * https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
        */
       status?: pulumi.Input<core.v1.ServiceStatus>
-    }
-
-    interface ServiceSpec extends core.v1.ServiceSpec {
-      // TODO: improve acme field definition
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      acme?: any
     }
   }
 }

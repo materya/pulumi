@@ -20,10 +20,12 @@ const labels = {
 }
 
 export interface PostgreSqlArgs {
-  users: Array<PostgreSqlUser>
   databases: Array<string>
+  users: Array<PostgreSqlUser>
   adminUsername?: pulumi.Input<string>
   adminPassword?: pulumi.Input<string>
+  chartOverrides?: pulumi.Inputs
+  chartVersion?: string
   initScripts?: { [filename: string]: string }
   namespace?: string
   nodeSelector?: pulumi.Input<Record<string, string>>
@@ -32,7 +34,6 @@ export interface PostgreSqlArgs {
   }
   repmgrPassword?: pulumi.Input<string>
   version?: '12.3.0' | '11.8.0' | '10.13.0' | '9.6.18'
-  chartVersion?: string
 }
 
 export class PostgreSQL extends pulumi.ComponentResource {
@@ -55,15 +56,16 @@ export class PostgreSQL extends pulumi.ComponentResource {
   ) {
     super('materya:k8s:PostgreSQL', name, {}, opts)
 
-    let repmgrPassword = args.repmgrPassword
-      ?? config.getSecret('repmgrPassword')
     const {
-      namespace = 'default',
       nodeSelector,
-      adminUsername = 'postgres',
       adminPassword = config.getSecret('adminPassword'),
-      version = '12.3.0',
+      adminUsername = 'postgres',
       chartVersion = '6.2.3',
+      namespace = 'default',
+      version = '12.3.0',
+    } = args
+    let {
+      repmgrPassword = config.getSecret('repmgrPassword'),
     } = args
     const diskSize = args.persistence?.size ?? config.get('diskSize')
 
@@ -129,6 +131,7 @@ export class PostgreSQL extends pulumi.ComponentResource {
         persistence: {
           size: diskSize ?? '10Gi',
         },
+        ...args.chartOverrides,
       },
     }, { parent: this })
 
