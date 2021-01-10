@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.1](https://github.com/materya/pulumi/compare/v3.1.0...v3.1.1) (2021-01-10)
+
+
+### Bug Fixes
+
+* **postgresql:** adjust chart overrides parameter ([aece8b3](https://github.com/materya/pulumi/commit/aece8b3bc9bb4b72809529c36e685ffaa5f2b74f))
+
 ## [3.1.0](https://github.com/materya/pulumi/compare/v3.0.1...v3.1.0) (2021-01-10)
 
 
