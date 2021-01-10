@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/materya/pulumi/compare/v3.0.1...v3.1.0) (2021-01-10)
+
+
+### Features
+
+* **postgresql:** add a cahrt override parameters ([445e547](https://github.com/materya/pulumi/commit/445e5470624e6e3bff6aed0b995bf7af8e03fada))
+
 ### [3.0.1](https://github.com/materya/pulumi/compare/v3.0.0...v3.0.1) (2020-12-15)
 
 
