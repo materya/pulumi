@@ -24,7 +24,10 @@ export interface PostgreSqlArgs {
   users: Array<PostgreSqlUser>
   adminUsername?: pulumi.Input<string>
   adminPassword?: pulumi.Input<string>
-  chartOverrides?: pulumi.Inputs
+  chartOverrides?: {
+    postgresql?: pulumi.Inputs
+    pgpool?: pulumi.Inputs
+  }
   chartVersion?: string
   initScripts?: { [filename: string]: string }
   namespace?: string
@@ -114,6 +117,7 @@ export class PostgreSQL extends pulumi.ComponentResource {
           nodeSelector,
           adminUsername,
           initdbScripts: pgpoolInitdbScripts,
+          ...args.chartOverrides?.pgpool,
         },
         postgresql: {
           database: 'postgres',
@@ -124,6 +128,7 @@ export class PostgreSQL extends pulumi.ComponentResource {
           username: adminUsername,
           initdbScripts: postgresqlInitdbScripts,
           postgresPassword: adminPassword,
+          ...args.chartOverrides?.postgresql,
         },
         postgresqlImage: {
           tag: version,
@@ -131,7 +136,6 @@ export class PostgreSQL extends pulumi.ComponentResource {
         persistence: {
           size: diskSize ?? '10Gi',
         },
-        ...args.chartOverrides,
       },
     }, { parent: this })
 
