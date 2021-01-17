@@ -40,7 +40,7 @@ else
 endif
 
 .PHONY: prerelease
-prerelease: $(DIST)
+prerelease: clean $(DIST)
 ifneq (,$(findstring n,$(MAKEFLAGS)))
 	+$(PM) run release -- --prerelease $(PRERELEASE_TAG) --dry-run
 	+$(PM) $(PUBLISH_FLAGS) --tag $(PRERELEASE_TAG) --dry-run
