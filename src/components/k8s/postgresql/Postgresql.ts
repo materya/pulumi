@@ -11,10 +11,7 @@ export type PostgresqlUserCredentials = {
 export interface PostgresqlArgs {
   chartValuesOverride?: pulumi.Inputs
   defaults?: {
-    admin?: {
-      password?: pulumi.Input<string>
-      username?: pulumi.Input<string>
-    }
+    adminPassword?: pulumi.Input<string>
     databaseName?: string
     version?: '12.3.0' | '11.8.0' | '10.13.0' | '9.6.18'
   }
@@ -26,8 +23,6 @@ export interface PostgresqlArgs {
 
 export class Postgresql extends pulumi.ComponentResource {
   public readonly adminPassword: pulumi.Output<string>
-
-  public readonly adminUsername: pulumi.Output<string>
 
   public readonly adminConnectionUrl: pulumi.Output<string>
 
@@ -75,21 +70,16 @@ export class Postgresql extends pulumi.ComponentResource {
     } = args
 
     const {
-      admin: adminProps = {},
-      databaseName = 'postgres',
-      version = '12.3.0',
-    } = defaultProps
-
-    const {
-      password: adminPassword = new random
+      adminPassword = new random
         .RandomString(`${name}-adminPassword`, {
           length: 32,
           minNumeric: 6,
           minUpper: 6,
           special: false,
         }, { parent: this }).result,
-      username: adminUsername = 'admin',
-    } = adminProps
+      databaseName = 'postgres',
+      version = '12.3.0',
+    } = defaultProps
 
     this.repmgrPassword = new random.RandomString(`${name}-repmgrPassword`, {
       length: 32,
@@ -130,7 +120,6 @@ export class Postgresql extends pulumi.ComponentResource {
       pgpool: {
         adminPassword,
         nodeSelector,
-        adminUsername,
         customUsersSecret: pgpoolSecret.metadata.name,
       },
       postgresql: {
@@ -138,9 +127,9 @@ export class Postgresql extends pulumi.ComponentResource {
         nodeSelector,
         database: databaseName,
         password: adminPassword,
-        repmgrPassword: this.repmgrPassword,
-        username: adminUsername,
         postgresPassword: adminPassword,
+        repmgrPassword: this.repmgrPassword,
+        username: 'postgres',
       },
       postgresqlImage: {
         tag: version,
@@ -177,12 +166,10 @@ export class Postgresql extends pulumi.ComponentResource {
       `${name}-pgpool`,
     )
 
-    this.adminUsername = pulumi.output(adminUsername)
-
     this.adminPassword = pulumi.secret(adminPassword)
 
     this.adminConnectionUrl = pulumi
-      .secret(`postgres://${adminUsername}:${adminPassword}@${name}-pgpool/postgres`)
+      .secret(`postgres://postgres:${adminPassword}@${name}-pgpool/postgres`)
 
     this.poolHost = pulumi
       .all([this.poolService.metadata.name])
@@ -193,7 +180,7 @@ export class Postgresql extends pulumi.ComponentResource {
       // host: this.poolHost,
       host: '127.0.0.1',
       superuser: true,
-      username: adminUsername,
+      username: 'postgres',
       password: adminPassword,
       sslmode: 'disable',
     }, { parent: this })
