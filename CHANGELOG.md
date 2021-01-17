@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-rc.3](https://github.com/materya/pulumi/compare/v4.0.0-rc.2...v4.0.0-rc.3) (2021-01-17)
+
+
+### Bug Fixes
+
+* **postgresql:** wrong admin username handling ([9b74df7](https://github.com/materya/pulumi/commit/9b74df7d8db49cb12a6a50b14ddee26803760c52))
+
 ## [4.0.0-rc.2](https://github.com/materya/pulumi/compare/v4.0.0-rc.1...v4.0.0-rc.2) (2021-01-17)
 
 
