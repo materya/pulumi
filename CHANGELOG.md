@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-beta.0](https://github.com/materya/pulumi/compare/v3.1.1...v4.0.0-beta.0) (2021-01-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **k8s/postgresql:** refactor of Postgresql module
+
+### Features
+
+* **k8s/postgresql:** refactor of Postgresql module ([653ac9a](https://github.com/materya/pulumi/commit/653ac9a6ad89f3b816b6313a09661cf530f29fb3))
+
 ### [3.1.1](https://github.com/materya/pulumi/compare/v3.1.0...v3.1.1) (2021-01-10)
 
 
