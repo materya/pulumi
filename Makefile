@@ -4,7 +4,7 @@ PM = npm
 PMCMD = run
 RM = rm
 
-PRERELEASE_TAG ?= beta
+PRERELEASE_TAG ?= rc
 PUBLISH_FLAGS = publish --access public
 
 MODULES = node_modules
