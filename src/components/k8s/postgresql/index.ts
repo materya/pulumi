@@ -10,8 +10,8 @@ export type PostgresqlUserCredentials = {
 
 export interface PostgresqlArgs {
   chartValuesOverride?: pulumi.Inputs
-  defaults: {
-    admin: {
+  defaults?: {
+    admin?: {
       password?: pulumi.Input<string>
       username?: pulumi.Input<string>
     }
@@ -69,14 +69,16 @@ export class Postgresql extends pulumi.ComponentResource {
 
     const {
       chartValuesOverride,
+      defaults: defaultProps = {},
       nodeSelector,
       namespace = 'default',
     } = args
 
     const {
+      admin: adminProps = {},
       databaseName = 'postgres',
       version = '12.3.0',
-    } = args.defaults
+    } = defaultProps
 
     const {
       password: adminPassword = new random
@@ -87,7 +89,7 @@ export class Postgresql extends pulumi.ComponentResource {
           special: false,
         }, { parent: this }).result,
       username: adminUsername = 'admin',
-    } = args.defaults.admin
+    } = adminProps
 
     this.repmgrPassword = new random.RandomString(`${name}-repmgrPassword`, {
       length: 32,
