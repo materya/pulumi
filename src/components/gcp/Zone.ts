@@ -22,7 +22,7 @@ export class Zone extends pulumi.ComponentResource {
       description: `${args.domain} Zone`,
     }, { parent: this })
 
-    const $parentRecordSet = args.parentZone && new gcp.dns.RecordSet(
+    const _parentRecordSet = args.parentZone && new gcp.dns.RecordSet(
       `${name}-ns-recordset`,
       {
         name: `${args.domain}.`,

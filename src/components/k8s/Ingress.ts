@@ -66,7 +66,7 @@ export class Ingress extends pulumi.ComponentResource {
         throw new Error('If `tls` is enabled, provide a `CertManagerArgs` options object.')
       }
 
-      const $certManager = new CertManager(
+      const _certManager = new CertManager(
         `${name}-certmanager`,
         args.tls.options,
         { parent: this },

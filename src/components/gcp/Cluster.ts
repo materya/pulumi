@@ -175,7 +175,7 @@ export class Cluster extends pulumi.ComponentResource {
       { parent: this },
     )
 
-    const $roleBinding = new k8s.rbac.v1.ClusterRoleBinding(
+    const _roleBinding = new k8s.rbac.v1.ClusterRoleBinding(
       `${name}-k8s-binding`,
       {
         metadata: {

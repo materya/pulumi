@@ -3,7 +3,7 @@ import { ComponentResourceOptions } from '@pulumi/pulumi'
 
 import { ServiceRole } from '../ServiceRole'
 
-const EKSWorkerRole = (
+const eksWorkerRole = (
   name: string,
   opts?: ComponentResourceOptions,
 ): iam.Role => {
@@ -19,4 +19,4 @@ const EKSWorkerRole = (
   return serviceRole.role
 }
 
-export default EKSWorkerRole
+export default eksWorkerRole

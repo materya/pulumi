@@ -46,7 +46,7 @@ export class IRSA extends pulumi.ComponentResource {
       assumeRolePolicy: trustPolicy.json,
     }, { parent: this })
 
-    const $rolePolicy = new aws.iam.RolePolicy(`${name}-policy`, {
+    const _rolePolicy = new aws.iam.RolePolicy(`${name}-policy`, {
       name: `${name}-policy`,
       role: this.role,
       policy: pulumi.output(policy).json,

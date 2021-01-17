@@ -37,7 +37,7 @@ export class Identity extends pulumi.ComponentResource {
     }, { parent: this })
 
     if (args.customPolicy) {
-      const $customPolicy = new aws.iam.RolePolicy(`${name}-role-policy`, {
+      const _customPolicy = new aws.iam.RolePolicy(`${name}-role-policy`, {
         name: `${name}-role-policy`,
         role,
         policy: args.customPolicy,

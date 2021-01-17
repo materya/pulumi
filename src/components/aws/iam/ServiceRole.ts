@@ -27,7 +27,7 @@ export class ServiceRole extends pulumi.ComponentResource {
     }, { parent: this })
 
     if (args.customPolicy) {
-      const $customPolicy = new aws.iam.RolePolicy(`${name}-policy`, {
+      const _customPolicy = new aws.iam.RolePolicy(`${name}-policy`, {
         name: `${name}-policy`,
         role,
         policy: args.customPolicy,

@@ -17,7 +17,7 @@ export interface PostgresqlArgs {
     }
     databaseName?: string
     version?: '12.3.0' | '11.8.0' | '10.13.0' | '9.6.18'
-  },
+  }
   labels?: Record<string, string>
   namespace?: string
   nodeSelector?: pulumi.Input<Record<string, string>>
@@ -97,7 +97,7 @@ export class Postgresql extends pulumi.ComponentResource {
     }, { parent: this }).result
 
     if (namespace !== 'default') {
-      const $namespace = new k8s.core.v1.Namespace(`namespace-${namespace}`, {
+      const _namespace = new k8s.core.v1.Namespace(`namespace-${namespace}`, {
         metadata: {
           name: namespace,
         },
@@ -149,13 +149,13 @@ export class Postgresql extends pulumi.ComponentResource {
     }
 
     this.chart = new k8s.helm.v2.Chart(name, {
-      fetchOpts: { repo: chartContext.repository },
-      version: chartContext.version,
-      chart: chartContext.name,
       namespace,
+      chart: chartContext.name,
+      fetchOpts: { repo: chartContext.repository },
       values: chartValuesOverride
         ? carbon.tools.merge(chartValues, chartValuesOverride)
         : chartValues,
+      version: chartContext.version,
     }, { parent: this })
 
     this.psqlService = this.chart.getResource(

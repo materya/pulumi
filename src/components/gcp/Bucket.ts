@@ -45,7 +45,7 @@ export class Bucket extends pulumi.ComponentResource {
       displayName: `${name} bucket admin`,
     }, { parent: this })
 
-    const $adminRoleBinding = new gcp.storage.BucketIAMBinding(
+    const _adminRoleBinding = new gcp.storage.BucketIAMBinding(
       `${name}-admin-binding`,
       {
         bucket: this.bucket.name,
@@ -58,7 +58,7 @@ export class Bucket extends pulumi.ComponentResource {
     )
 
     if (args.isPublic) {
-      const $publicRoleBinding = new gcp.storage.BucketIAMBinding(
+      const _publicRoleBinding = new gcp.storage.BucketIAMBinding(
         `${name}-public-binding`,
         {
           bucket: this.bucket.name,

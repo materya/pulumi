@@ -40,7 +40,7 @@ export class ServiceAccount extends pulumi.ComponentResource {
 
     if (args && args.permissions) {
       const roleId = `custom.${name.replace(/-/g, '_')}`
-      const $customRole = new gcp.projects.IAMCustomRole(`${this.name}-role`, {
+      const _customRole = new gcp.projects.IAMCustomRole(`${this.name}-role`, {
         roleId,
         title: `${args.displayName || this.name} Custom Role`,
         project: gcp.config.project,
@@ -49,7 +49,7 @@ export class ServiceAccount extends pulumi.ComponentResource {
       roles = [...roles, `projects/${gcp.config.project}/roles/${roleId}`]
     }
 
-    const $rolesBinding = roles.map(role => (
+    const _rolesBinding = roles.map(role => (
       new gcp.projects.IAMBinding(`${this.name}-binding-${role}`, {
         role,
         members: [

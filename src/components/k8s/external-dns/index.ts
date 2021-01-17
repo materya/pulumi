@@ -64,7 +64,7 @@ export class ExternalDNS extends pulumi.ComponentResource {
       awsAssumeRole = irsa.role
     }
 
-    const $chart = new k8s.helm.v2.Chart(name, {
+    const _chart = new k8s.helm.v2.Chart(name, {
       fetchOpts: {
         repo: 'https://charts.bitnami.com/bitnami',
       },
