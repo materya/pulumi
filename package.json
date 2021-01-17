@@ -1,7 +1,7 @@
 {
   "name": "@materya/pulumi",
   "description": "Set of components and custom resources for pulumi TS SDK",
-  "version": "4.0.0-rc.0",
+  "version": "4.0.0-rc.1",
   "author": "Sylver <sylver@materya.io>",
   "email": "sylver@materya.io",
   "homepage": "https://github.com/materya/pulumi",

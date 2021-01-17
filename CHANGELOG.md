@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-rc.1](https://github.com/materya/pulumi/compare/v4.0.0-rc.0...v4.0.0-rc.1) (2021-01-17)
+
+
+### Bug Fixes
+
+* **postgresql:** default arguments handling ([87e7428](https://github.com/materya/pulumi/commit/87e7428b0f38e3859079fd9685c9077bb8ca54d0))
+
 ## [4.0.0-rc.0](https://github.com/materya/pulumi/compare/v4.0.0-beta.0...v4.0.0-rc.0) (2021-01-17)
 
 ## [4.0.0-beta.0](https://github.com/materya/pulumi/compare/v3.1.1...v4.0.0-beta.0) (2021-01-17)
