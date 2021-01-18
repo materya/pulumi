@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-rc.5](https://github.com/materya/pulumi/compare/v4.0.0-rc.4...v4.0.0-rc.5) (2021-01-18)
+
+
+### Bug Fixes
+
+* **k8s/postgresql/user:** add schema dependency to privs & grants ([fcbd836](https://github.com/materya/pulumi/commit/fcbd8363f5f4a1ffb22c7a2ab69a310f2d486c39))
+
 ## [4.0.0-rc.4](https://github.com/materya/pulumi/compare/v4.0.0-rc.3...v4.0.0-rc.4) (2021-01-18)
 
 
