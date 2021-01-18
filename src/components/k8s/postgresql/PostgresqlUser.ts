@@ -87,14 +87,14 @@ export class PostgresqlUser extends pulumi.ComponentResource {
 
   setPrivileges ({
     database,
+    schema,
     owner = this.role.name,
     privileges = defaultPrivileges,
-    schema = 'public',
   }: {
     database: postgresql.Database
+    schema: postgresql.Schema
     owner?: pulumi.Input<string>
     privileges?: Grants
-    schema?: string
   }): void {
     Object.keys(privileges).forEach(objectType => {
       const _privs = new postgresql.DefaultPrivileges(
@@ -102,14 +102,14 @@ export class PostgresqlUser extends pulumi.ComponentResource {
         {
           database: database.name,
           privileges: privileges[objectType as ObjectType],
-          schema,
+          schema: schema.name,
           objectType,
           owner,
           role: this.role.name,
         },
         {
           parent: this,
-          dependsOn: [this.role, database],
+          dependsOn: [this.role, database, schema],
         },
       )
 
@@ -119,13 +119,13 @@ export class PostgresqlUser extends pulumi.ComponentResource {
           {
             database: database.name,
             privileges: privileges[objectType as ObjectType],
-            schema,
+            schema: schema.name,
             objectType,
             role: this.role.name,
           },
           {
             parent: this,
-            dependsOn: [this.role, database],
+            dependsOn: [this.role, database, schema],
           },
         )
       }
