@@ -13,7 +13,7 @@ export interface PostgresqlArgs {
   defaults?: {
     adminPassword?: pulumi.Input<string>
     databaseName?: string
-    version?: '12.3.0' | '11.8.0' | '10.13.0' | '9.6.18'
+    version?: string
   }
   labels?: Record<string, string>
   namespace?: string
