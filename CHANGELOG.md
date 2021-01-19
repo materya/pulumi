@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-rc.8](https://github.com/materya/pulumi/compare/v4.0.0-rc.7...v4.0.0-rc.8) (2021-01-19)
+
+
+### Bug Fixes
+
+* **k8s/postgresql:** grants creation issue ([0ef52d1](https://github.com/materya/pulumi/commit/0ef52d1cfa97e5c6287711050db1c893d345cc9e))
+
 ## [4.0.0-rc.7](https://github.com/materya/pulumi/compare/v4.0.0-rc.6...v4.0.0-rc.7) (2021-01-19)
 
 
