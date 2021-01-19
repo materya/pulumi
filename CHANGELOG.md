@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/materya/pulumi/compare/v4.0.0-rc.8...v4.0.0) (2021-01-19)
+
+
+### Bug Fixes
+
+* small adjustments ([7757e5f](https://github.com/materya/pulumi/commit/7757e5f1c5ef0790be4b08cf2d378725051ea827))
+
 ## [4.0.0-rc.8](https://github.com/materya/pulumi/compare/v4.0.0-rc.7...v4.0.0-rc.8) (2021-01-19)
 
 
