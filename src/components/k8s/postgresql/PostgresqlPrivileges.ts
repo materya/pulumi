@@ -105,7 +105,7 @@ export class PostgresqlPrivileges extends pulumi.ComponentResource {
 
     this.defaultPrivileges = (Object.keys(privileges) as Array<ObjectType>)
       .map(objectType => (
-        new postgresql.DefaultPrivileges(`${name}-deflt-privs-${objectType}`, {
+        new postgresql.DefaultPrivileges(`${name}-defprivs-${objectType}`, {
           database,
           objectType,
           owner,
@@ -131,5 +131,10 @@ export class PostgresqlPrivileges extends pulumi.ComponentResource {
     this.owner = pulumi.output(owner)
     this.role = pulumi.output(role)
     this.schema = pulumi.output(schema)
+
+    this.registerOutputs({
+      privs: this.defaultPrivileges,
+      grants: this.grants,
+    })
   }
 }

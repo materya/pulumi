@@ -53,15 +53,6 @@ export class Postgresql extends pulumi.ComponentResource {
       version: '6.3.6',
     }
 
-    const labels = {
-      provisioner: 'pulumi',
-      module: 'materya',
-      ...args.labels,
-      tier: 'backend',
-      service: 'postgresql',
-      type: 'data',
-    }
-
     const {
       chartValuesOverride,
       defaults: defaultProps = {},
@@ -80,6 +71,16 @@ export class Postgresql extends pulumi.ComponentResource {
       databaseName = 'postgres',
       version = '12.3.0',
     } = defaultProps
+
+    const labels = {
+      provisioner: 'pulumi',
+      module: 'materya',
+      ...args.labels,
+      tier: 'backend',
+      service: 'postgresql',
+      type: 'data',
+      version,
+    }
 
     this.repmgrPassword = new random.RandomString(`${name}-repmgrPassword`, {
       length: 32,
