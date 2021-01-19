@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-rc.7](https://github.com/materya/pulumi/compare/v4.0.0-rc.6...v4.0.0-rc.7) (2021-01-19)
+
+
+### Bug Fixes
+
+* **k8s/postgresql/user:** postgresql.Grant resource naming ([b5cd276](https://github.com/materya/pulumi/commit/b5cd276881c60652938887f909cdd64ff0981982))
+
 ## [4.0.0-rc.6](https://github.com/materya/pulumi/compare/v4.0.0-rc.5...v4.0.0-rc.6) (2021-01-19)
 
 
