@@ -86,7 +86,7 @@ export class PostgresqlPrivileges extends pulumi.ComponentResource {
   /**
    * Grant rule applied to this role.
    */
-  public readonly grant?: postgresql.Grant
+  public readonly grants: postgresql.Grant[]
 
   constructor (
     name: string,
@@ -104,7 +104,6 @@ export class PostgresqlPrivileges extends pulumi.ComponentResource {
     } = args
 
     this.defaultPrivileges = (Object.keys(privileges) as Array<ObjectType>)
-      .filter(objectType => objectType !== 'type')
       .map(objectType => (
         new postgresql.DefaultPrivileges(`${name}-deflt-privs-${objectType}`, {
           database,
@@ -116,15 +115,17 @@ export class PostgresqlPrivileges extends pulumi.ComponentResource {
         }, { parent: this })
       ))
 
-    if (privileges.type) {
-      this.grant = new postgresql.Grant(`${name}-grant`, {
-        database,
-        schema,
-        role,
-        objectType: 'type',
-        privileges: privileges.type,
-      }, { parent: this })
-    }
+    this.grants = (Object.keys(privileges) as Array<ObjectType>)
+      .filter(objectType => objectType !== 'type')
+      .map(objectType => (
+        new postgresql.Grant(`${name}-grant-${objectType}`, {
+          database,
+          objectType,
+          role,
+          schema,
+          privileges: privileges[objectType],
+        }, { parent: this })
+      ))
 
     this.database = pulumi.output(database)
     this.owner = pulumi.output(owner)
