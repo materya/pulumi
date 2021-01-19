@@ -2,44 +2,9 @@ import * as pulumi from '@pulumi/pulumi'
 import * as postgresql from '@pulumi/postgresql'
 import * as random from '@pulumi/random'
 
-type ObjectType =
-  | 'function'
-  | 'sequence'
-  | 'table'
-  | 'type'
-
-type Privileges = Array<string>
-
-type Grants = Record<ObjectType, Privileges>
-
-const defaultPrivileges: Grants = {
-  table: [
-    'UPDATE',
-    'REFERENCES',
-    // 'TRUNCATE',
-    'SELECT',
-    'DELETE',
-    'TRIGGER',
-    'INSERT',
-  ],
-  sequence: [
-    'USAGE',
-    'SELECT',
-    // 'UPDATE',
-  ],
-  function: [
-    'EXECUTE',
-  ],
-  type: [
-    'USAGE',
-  ],
-}
-
 export interface PostgresqlUserArgs {
-  password?: pulumi.Input<string>
-  privileges?: pulumi.Input<Grants>
-  schema?: pulumi.Input<string>
   username: pulumi.Input<string>
+  password?: pulumi.Input<string>
 }
 
 export class PostgresqlUser extends pulumi.ComponentResource {
@@ -68,67 +33,18 @@ export class PostgresqlUser extends pulumi.ComponentResource {
       username,
     } = args
 
-    const role = new postgresql.Role(`${name}-role`, {
+    this.role = new postgresql.Role(`${name}-role`, {
       password,
       login: true,
       name: username,
     }, { parent: this })
 
     this.name = name
-    this.username = role.name
-    this.password = role.password
-    this.role = role
+    this.username = this.role.name
+    this.password = this.role.password
 
     this.registerOutputs({
-      password: this.password,
-      username: this.username,
-    })
-  }
-
-  setPrivileges ({
-    database,
-    schema,
-    owner = this.role.name,
-    privileges = defaultPrivileges,
-  }: {
-    database: postgresql.Database
-    schema: postgresql.Schema
-    owner?: pulumi.Input<string>
-    privileges?: Grants
-  }): void {
-    Object.keys(privileges).forEach(objectType => {
-      const _privs = new postgresql.DefaultPrivileges(
-        `${this.name}-${objectType}-default-privs`,
-        {
-          database: database.name,
-          privileges: privileges[objectType as ObjectType],
-          schema: schema.name,
-          objectType,
-          owner,
-          role: this.role.name,
-        },
-        {
-          parent: this,
-          dependsOn: [this.role, database, schema],
-        },
-      )
-
-      if (objectType !== 'type') {
-        const _grants = new postgresql.Grant(
-          `${this.name}-${objectType}-grants`,
-          {
-            database: database.name,
-            privileges: privileges[objectType as ObjectType],
-            schema: schema.name,
-            objectType,
-            role: this.role.name,
-          },
-          {
-            parent: this,
-            dependsOn: [this.role, database, schema],
-          },
-        )
-      }
+      role: this.role,
     })
   }
 
