@@ -1,5 +1,6 @@
 export * from './certmanager'
-export * from './gke-pvm-killer'
-export * from './postgresql'
 export * from './external-dns'
+export * from './gke-pvm-killer'
+export * as postgresql from './postgresql'
+export * from './postgresql/Postgresql'
 export * from './Ingress'

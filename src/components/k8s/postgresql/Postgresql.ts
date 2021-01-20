@@ -178,8 +178,7 @@ export class Postgresql extends pulumi.ComponentResource {
 
     this.provider = new postgresql.Provider(`${name}-provider`, {
       expectedVersion: version,
-      // host: this.poolHost,
-      host: '127.0.0.1',
+      host: this.poolHost,
       superuser: true,
       username: 'postgres',
       password: adminPassword,

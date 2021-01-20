@@ -1,3 +1,3 @@
-export * from './Postgresql'
-export * from './PostgresqlPrivileges'
-export * from './PostgresqlUser'
+export * from './Privileges'
+export * from './Role'
+export * as profiles from './profiles'

@@ -1,44 +1,83 @@
 import * as pulumi from '@pulumi/pulumi'
 import * as postgresql from '@pulumi/postgresql'
 
-type ObjectType =
-  | 'function'
-  | 'sequence'
-  | 'table'
-  | 'type'
+type DatabasePrivilege =
+  | 'CONNECT'
+  | 'CREATE'
+  | 'TEMPORARY'
 
-type Privileges = Array<string>
+type FunctionPrivilege =
+  | 'EXECUTE'
 
-type Grants = Record<ObjectType, Privileges>
+type SchemaPrivilege =
+  | 'CREATE'
+  | 'USAGE'
 
-const defaultPrivileges: Grants = {
-  table: [
-    'UPDATE',
-    'REFERENCES',
-    // 'TRUNCATE',
-    'SELECT',
-    'DELETE',
-    'TRIGGER',
-    'INSERT',
-  ],
-  sequence: [
-    'USAGE',
-    'SELECT',
-    // 'UPDATE',
-  ],
-  function: [
-    'EXECUTE',
-  ],
-  type: [
-    'USAGE',
-  ],
+type SequencePrivilege =
+  | 'SELECT'
+  | 'UPDATE'
+  | 'USAGE'
+
+type TablePrivilege =
+  | 'DELETE'
+  | 'INSERT'
+  | 'REFERENCES'
+  | 'SELECT'
+  | 'TRIGGER'
+  | 'TRUNCATE'
+  | 'UPDATE'
+
+type TypePrivilege =
+  | 'USAGE'
+
+type DefaultPrivileges = {
+  function?: FunctionPrivilege[]
+  sequence?: SequencePrivilege[]
+  table?: TablePrivilege[]
+  type?: TypePrivilege[]
 }
 
-export interface PostgresqlPrivilegesArgs {
+type GrantPrivileges = {
+  database?: DatabasePrivilege[]
+  function?: FunctionPrivilege[]
+  schema?: SchemaPrivilege[]
+  sequence?: SequencePrivilege[]
+  table?: TablePrivilege[]
+}
+
+type ObjectType = keyof DefaultPrivileges | keyof GrantPrivileges
+// const defaultPrivileges: Grants = {
+//   table: [
+//     'UPDATE',
+//     'REFERENCES',
+//     // 'TRUNCATE',
+//     'SELECT',
+//     'DELETE',
+//     'TRIGGER',
+//     'INSERT',
+//   ],
+//   sequence: [
+//     'USAGE',
+//     'SELECT',
+//     // 'UPDATE',
+//   ],
+//   function: [
+//     'EXECUTE',
+//   ],
+//   type: [
+//     'USAGE',
+//   ],
+// }
+
+export interface PrivilegesArgs {
   /**
    * The database to grant privileges on for this role.
    */
   readonly database: pulumi.Input<string>
+  /**
+   * The list of privileges to apply.
+   */
+  readonly privileges: DefaultPrivileges & GrantPrivileges
   /**
    * the name of the role to grant privileges on.
    */
@@ -51,13 +90,15 @@ export interface PostgresqlPrivilegesArgs {
    * Role for which apply default privileges (You can change default privileges only for objects that will be created by yourself or by roles that you are a member of).
    */
   readonly owner?: pulumi.Input<string>
-  /**
-   * The list of privileges to apply as default privileges.
-   */
-  readonly privileges?: Grants
 }
 
-export class PostgresqlPrivileges extends pulumi.ComponentResource {
+/**
+ * Possible object type :
+ *
+ * - Default: `table`, `sequence`, `function`, `type`
+ * - Grant: `database`, `schema`, `table`, `sequence`, `function`
+ */
+export class Privileges extends pulumi.ComponentResource {
   /**
    * The database which privileges have been granted on for this role.
    */
@@ -90,28 +131,29 @@ export class PostgresqlPrivileges extends pulumi.ComponentResource {
 
   constructor (
     name: string,
-    args: PostgresqlPrivilegesArgs,
+    args: PrivilegesArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('materya:k8s:PostgresqlPrivileges', name, {}, opts)
+    super('materya:k8s:postgresql:Privileges', name, {}, opts)
 
     const {
       database,
-      owner = args.role,
       role,
       schema,
-      privileges = defaultPrivileges,
+      owner = args.role,
+      privileges,
     } = args
 
     this.defaultPrivileges = (Object.keys(privileges) as Array<ObjectType>)
+      .filter(objectType => !['db', 'schema'].includes(objectType))
       .map(objectType => (
-        new postgresql.DefaultPrivileges(`${name}-defprivs-${objectType}`, {
+        new postgresql.DefaultPrivileges(`${name}-default-${objectType}`, {
           database,
           objectType,
           owner,
           role,
           schema,
-          privileges: privileges[objectType],
+          privileges: privileges[objectType] || [],
         }, { parent: this })
       ))
 
@@ -123,7 +165,7 @@ export class PostgresqlPrivileges extends pulumi.ComponentResource {
           objectType,
           role,
           schema,
-          privileges: privileges[objectType],
+          privileges: privileges[objectType] || [],
         }, { parent: this })
       ))
 
