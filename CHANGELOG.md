@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.2.1](https://github.com/materya/pulumi/compare/v4.2.0...v4.2.1) (2021-01-20)
+
+
+### Bug Fixes
+
+* postgresql Privileges handling ([d043b31](https://github.com/materya/pulumi/commit/d043b3197947a589054ccf9f39464880583072de))
+
 ## [4.2.0](https://github.com/materya/pulumi/compare/v4.1.0...v4.2.0) (2021-01-20)
 
 
