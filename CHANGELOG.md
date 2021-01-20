@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](https://github.com/materya/pulumi/compare/v4.1.0...v4.2.0) (2021-01-20)
+
+
+### Features
+
+* reorganize postgresql components ([e8b247c](https://github.com/materya/pulumi/commit/e8b247c538cc91bb7f96845d4ce2cca1d979e113))
+
 ## [4.1.0](https://github.com/materya/pulumi/compare/v4.0.0...v4.1.0) (2021-01-20)
 
 
