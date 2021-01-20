@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/materya/pulumi/compare/v4.0.0...v4.1.0) (2021-01-20)
+
+
+### Features
+
+* **k8s/psql:** add standard privileges profiles ([a62a89b](https://github.com/materya/pulumi/commit/a62a89be23ec272f4ead01f680f8491aa0b1466a))
+
 ## [4.0.0](https://github.com/materya/pulumi/compare/v4.0.0-rc.8...v4.0.0) (2021-01-19)
 
 
