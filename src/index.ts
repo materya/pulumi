@@ -1,5 +1,4 @@
-import * as aws from './aws'
-import * as gcp from './gcp'
-import * as k8s from './k8s'
-
-export { aws, gcp, k8s }
+export * as aws from './aws'
+export * as gcp from './gcp'
+export * as k8s from './k8s'
+export * as postgresql from './postgresql'

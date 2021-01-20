@@ -2,13 +2,13 @@ import * as pulumi from '@pulumi/pulumi'
 import * as postgresql from '@pulumi/postgresql'
 import * as random from '@pulumi/random'
 
-export interface PostgresqlRoleArgs {
+export interface RoleArgs {
   login?: boolean
   name?: pulumi.Input<string>
   password?: pulumi.Input<string>
 }
 
-export class PostgresqlRole extends pulumi.ComponentResource {
+export class Role extends pulumi.ComponentResource {
   public readonly login: boolean
 
   public readonly name: pulumi.Output<string>
@@ -19,7 +19,7 @@ export class PostgresqlRole extends pulumi.ComponentResource {
 
   constructor (
     name: string,
-    args: PostgresqlRoleArgs,
+    args: RoleArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
     super('materya:k8s:PostgresqlUser', name, {}, opts)
