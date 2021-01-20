@@ -61,7 +61,7 @@
     "@typescript-eslint/eslint-plugin": "4.13.0",
     "@typescript-eslint/parser": "4.13.0",
     "codecov": "3.8.1",
-    "cross-env": "7.0.2",
+    "cross-env": "7.0.3",
     "eslint": "7.18.0",
     "eslint-config-materya": "7.0.2",
     "eslint-plugin-jsdoc": "31.0.5",
