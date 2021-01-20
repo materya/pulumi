@@ -45,8 +45,12 @@ export class Admin extends Privileges {
           'CREATE',
           'TEMPORARY',
         ],
-        schema: [
-          'CREATE',
+        function: [
+          'EXECUTE',
+        ],
+        sequence: [
+          'SELECT',
+          'UPDATE',
           'USAGE',
         ],
         table: [
@@ -57,14 +61,6 @@ export class Admin extends Privileges {
           'TRIGGER',
           'TRUNCATE',
           'UPDATE',
-        ],
-        sequence: [
-          'SELECT',
-          'UPDATE',
-          'USAGE',
-        ],
-        function: [
-          'EXECUTE',
         ],
         type: [
           'USAGE',

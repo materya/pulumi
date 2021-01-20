@@ -43,7 +43,12 @@ export class User extends Privileges {
         database: [
           'CONNECT',
         ],
-        schema: [
+        function: [
+          'EXECUTE',
+        ],
+        sequence: [
+          'SELECT',
+          'UPDATE',
           'USAGE',
         ],
         table: [
@@ -53,14 +58,6 @@ export class User extends Privileges {
           'SELECT',
           'TRIGGER',
           'UPDATE',
-        ],
-        sequence: [
-          'SELECT',
-          'UPDATE',
-          'USAGE',
-        ],
-        function: [
-          'EXECUTE',
         ],
         type: [
           'USAGE',

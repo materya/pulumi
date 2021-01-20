@@ -22,7 +22,7 @@ export class Role extends pulumi.ComponentResource {
     args: RoleArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('materya:k8s:PostgresqlUser', name, {}, opts)
+    super('materya:postgresql:Role', name, {}, opts)
 
     const {
       login = false,

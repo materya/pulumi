@@ -43,17 +43,14 @@ export class Reader extends Privileges {
         database: [
           'CONNECT',
         ],
-        schema: [
-          'USAGE',
-        ],
-        table: [
-          'SELECT',
+        function: [
+          // Must be empty to remove any existing privileges
         ],
         sequence: [
           'SELECT',
         ],
-        function: [
-          // Must be empty to remove any existing privileges
+        table: [
+          'SELECT',
         ],
         type: [
           'USAGE',

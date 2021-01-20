@@ -9,9 +9,9 @@ type DatabasePrivilege =
 type FunctionPrivilege =
   | 'EXECUTE'
 
-type SchemaPrivilege =
-  | 'CREATE'
-  | 'USAGE'
+// type SchemaPrivilege =
+//   | 'CREATE'
+//   | 'USAGE'
 
 type SequencePrivilege =
   | 'SELECT'
@@ -40,34 +40,11 @@ type DefaultPrivileges = {
 type GrantPrivileges = {
   database?: DatabasePrivilege[]
   function?: FunctionPrivilege[]
-  schema?: SchemaPrivilege[]
   sequence?: SequencePrivilege[]
   table?: TablePrivilege[]
 }
 
 type ObjectType = keyof DefaultPrivileges | keyof GrantPrivileges
-// const defaultPrivileges: Grants = {
-//   table: [
-//     'UPDATE',
-//     'REFERENCES',
-//     // 'TRUNCATE',
-//     'SELECT',
-//     'DELETE',
-//     'TRIGGER',
-//     'INSERT',
-//   ],
-//   sequence: [
-//     'USAGE',
-//     'SELECT',
-//     // 'UPDATE',
-//   ],
-//   function: [
-//     'EXECUTE',
-//   ],
-//   type: [
-//     'USAGE',
-//   ],
-// }
 
 export interface PrivilegesArgs {
   /**
@@ -134,7 +111,7 @@ export class Privileges extends pulumi.ComponentResource {
     args: PrivilegesArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('materya:k8s:postgresql:Privileges', name, {}, opts)
+    super('materya:postgresql:Privileges', name, {}, opts)
 
     const {
       database,
@@ -145,7 +122,7 @@ export class Privileges extends pulumi.ComponentResource {
     } = args
 
     this.defaultPrivileges = (Object.keys(privileges) as Array<ObjectType>)
-      .filter(objectType => !['db', 'schema'].includes(objectType))
+      .filter(objectType => objectType !== 'database')
       .map(objectType => (
         new postgresql.DefaultPrivileges(`${name}-default-${objectType}`, {
           database,
