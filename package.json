@@ -70,6 +70,6 @@
     "snyk": "1.437.4",
     "standard-version": "9.1.0",
     "tsutils": "3.19.0",
-    "typedoc": "0.20.14"
+    "typedoc": "0.20.23"
   }
 }
