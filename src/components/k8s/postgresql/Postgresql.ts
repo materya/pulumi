@@ -193,7 +193,7 @@ export class Postgresql extends pulumi.ComponentResource {
       poolHost: this.poolHost,
       provider: this.provider,
       psqlService: this.psqlService,
-      reprmgrPassword: this.repmgrPassword,
+      repmgrPassword: this.repmgrPassword,
     })
   }
 }
