@@ -47,7 +47,7 @@
     "@pulumi/aws": "3.23.0",
     "@pulumi/awsx": "0.23.0",
     "@pulumi/eks": "0.21.0",
-    "@pulumi/gcp": "4.7.0",
+    "@pulumi/gcp": "4.12.0",
     "@pulumi/kubernetes": "2.7.6",
     "@pulumi/postgresql": "2.5.3",
     "@pulumi/pulumi": "2.21.0",
