@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.2.2](https://github.com/materya/pulumi/compare/v4.2.1...v4.2.2) (2021-03-02)
+
+
+### Bug Fixes
+
+* **deps:** upgrade modules versions ([1c83de8](https://github.com/materya/pulumi/commit/1c83de8488ed9330deb099cb1c1d59aaaaec35bf))
+* package.json & package-lock.json to reduce vulnerabilities ([#441](https://github.com/materya/pulumi/issues/441)) ([bbad3a2](https://github.com/materya/pulumi/commit/bbad3a225160a8adee04d1dc9e6e68772d72c7f9))
+* **postgresql:** typo ([b392b49](https://github.com/materya/pulumi/commit/b392b4904e30e5a992a45b1fbddfaf28cac3a191))
+
 ### [4.2.1](https://github.com/materya/pulumi/compare/v4.2.0...v4.2.1) (2021-01-20)
 
 
