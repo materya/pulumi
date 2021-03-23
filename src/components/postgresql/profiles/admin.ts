@@ -48,6 +48,10 @@ export class Admin extends Privileges {
         function: [
           'EXECUTE',
         ],
+        schema: [
+          'CREATE',
+          'USAGE',
+        ],
         sequence: [
           'SELECT',
           'UPDATE',

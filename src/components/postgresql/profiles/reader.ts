@@ -46,6 +46,9 @@ export class Reader extends Privileges {
         function: [
           // Must be empty to remove any existing privileges
         ],
+        schema: [
+          'USAGE',
+        ],
         sequence: [
           'SELECT',
         ],

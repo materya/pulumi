@@ -46,6 +46,9 @@ export class User extends Privileges {
         function: [
           'EXECUTE',
         ],
+        schema: [
+          'USAGE',
+        ],
         sequence: [
           'SELECT',
           'UPDATE',

@@ -9,9 +9,9 @@ type DatabasePrivilege =
 type FunctionPrivilege =
   | 'EXECUTE'
 
-// type SchemaPrivilege =
-//   | 'CREATE'
-//   | 'USAGE'
+type SchemaPrivilege =
+  | 'CREATE'
+  | 'USAGE'
 
 type SequencePrivilege =
   | 'SELECT'
@@ -41,10 +41,13 @@ type GrantPrivileges = {
   database?: DatabasePrivilege[]
   function?: FunctionPrivilege[]
   sequence?: SequencePrivilege[]
+  schema?: SchemaPrivilege[]
   table?: TablePrivilege[]
 }
 
-type ObjectType = keyof DefaultPrivileges | keyof GrantPrivileges
+type ObjectType =
+  | keyof DefaultPrivileges
+  | keyof GrantPrivileges
 
 export interface PrivilegesArgs {
   /**
