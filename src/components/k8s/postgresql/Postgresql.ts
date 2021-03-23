@@ -13,6 +13,7 @@ export interface PostgresqlArgs {
   defaults?: {
     adminPassword?: pulumi.Input<string>
     databaseName?: string
+    repmgrPassword?: pulumi.Input<string>
     version?: string
   }
   labels?: Record<string, string>
@@ -61,14 +62,19 @@ export class Postgresql extends pulumi.ComponentResource {
     } = args
 
     const {
-      adminPassword = new random
-        .RandomString(`${name}-adminPassword`, {
-          length: 32,
-          minNumeric: 6,
-          minUpper: 6,
-          special: false,
-        }, { parent: this }).result,
+      adminPassword = new random.RandomString(`${name}-adminPassword`, {
+        length: 32,
+        minNumeric: 6,
+        minUpper: 6,
+        special: false,
+      }, { parent: this }).result,
       databaseName = 'postgres',
+      repmgrPassword = new random.RandomString(`${name}-adminPassword`, {
+        length: 32,
+        minNumeric: 6,
+        minUpper: 6,
+        special: false,
+      }, { parent: this }).result,
       version = '12.3.0',
     } = defaultProps
 
@@ -81,13 +87,6 @@ export class Postgresql extends pulumi.ComponentResource {
       type: 'data',
       version,
     }
-
-    this.repmgrPassword = new random.RandomString(`${name}-repmgrPassword`, {
-      length: 32,
-      minNumeric: 6,
-      minUpper: 6,
-      special: false,
-    }, { parent: this }).result
 
     if (namespace !== 'default') {
       const _namespace = new k8s.core.v1.Namespace(`namespace-${namespace}`, {
@@ -129,7 +128,7 @@ export class Postgresql extends pulumi.ComponentResource {
         database: databaseName,
         password: adminPassword,
         postgresPassword: adminPassword,
-        repmgrPassword: this.repmgrPassword,
+        repmgrPassword,
         username: 'postgres',
       },
       postgresqlImage: {
@@ -168,6 +167,7 @@ export class Postgresql extends pulumi.ComponentResource {
     )
 
     this.adminPassword = pulumi.secret(adminPassword)
+    this.repmgrPassword = pulumi.secret(repmgrPassword)
 
     this.adminConnectionUrl = pulumi
       .secret(`postgres://postgres:${adminPassword}@${name}-pgpool/postgres`)
