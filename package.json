@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@materya/carbon": "1.9.2",
-    "@pulumi/aws": "3.31.0",
+    "@pulumi/aws": "3.34.2",
     "@pulumi/awsx": "0.25.0",
     "@pulumi/eks": "0.22.0",
     "@pulumi/gcp": "4.13.0",
