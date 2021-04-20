@@ -46,7 +46,7 @@
     "@materya/carbon": "1.9.2",
     "@pulumi/aws": "3.31.0",
     "@pulumi/awsx": "0.25.0",
-    "@pulumi/eks": "0.22.0",
+    "@pulumi/eks": "0.30.0",
     "@pulumi/gcp": "4.13.0",
     "@pulumi/kubernetes": "2.8.2",
     "@pulumi/postgresql": "2.7.2",
