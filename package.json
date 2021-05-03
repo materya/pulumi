@@ -67,7 +67,7 @@
     "eslint-plugin-jsdoc": "32.2.0",
     "marked": "2.0.1",
     "npm-run-all": "4.1.5",
-    "snyk": "1.464.0",
+    "snyk": "1.575.0",
     "standard-version": "9.1.1",
     "tsutils": "3.20.0",
     "typedoc": "0.20.28"
