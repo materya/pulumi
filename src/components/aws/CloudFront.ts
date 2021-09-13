@@ -59,6 +59,9 @@ export class CloudFront extends pulumi.ComponentResource {
       comment: `${name} managed OAI`,
     }, { parent: this })
 
+    // TODO: Weird incompatible type compilation. To fix
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const distributionArgs: aws.cloudfront.DistributionArgs = pulumi
       .all([oai.cloudfrontAccessIdentityPath]).apply(([oaiPath]) => ({
         enabled: true,
@@ -128,13 +131,16 @@ export class CloudFront extends pulumi.ComponentResource {
 
     const distribution = new aws.cloudfront.Distribution(
       `${name}-distribution`,
+      // TODO: Weird incompatible type compilation. To fix
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       distributionArgs,
       { parent: this },
     )
 
-    aliases.map(aliase => (
-      new aws.route53.Record(`${name}-record-${aliase}`, {
-        name: aliase,
+    aliases.map(alias => (
+      new aws.route53.Record(`${name}-record-${alias}`, {
+        name: alias,
         zoneId: args.zoneId,
         type: 'A',
         aliases: [
