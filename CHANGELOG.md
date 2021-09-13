@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.0](https://github.com/materya/pulumi/compare/v4.3.0...v4.4.0) (2021-09-13)
+
+
+### Features
+
+* **aws.Zone:** extends native zone args ([ebf0c1b](https://github.com/materya/pulumi/commit/ebf0c1be29b14e59fc59eecdb611f8741912aed9))
+
 ## [4.3.0](https://github.com/materya/pulumi/compare/v4.2.2...v4.3.0) (2021-09-13)
 
 
