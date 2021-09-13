@@ -2,10 +2,9 @@ import * as aws from '@pulumi/aws'
 import * as pulumi from '@pulumi/pulumi'
 import type { Aws } from '@materya/pulumi'
 
-export interface ZoneArgs {
+export interface ZoneArgs extends aws.route53.ZoneArgs {
   domain?: string
   records?: Array<Aws.ZoneRecord>
-  tags?: { [key: string]: string }
 }
 
 export class Zone extends pulumi.ComponentResource {
@@ -22,13 +21,11 @@ export class Zone extends pulumi.ComponentResource {
   ) {
     super('materya:aws:Zone', name, {}, opts)
 
-    const { tags, domain = name, records = [] } = args
+    const { domain = name, records = [], ...zoneArgs } = args
 
     const zone = new aws.route53.Zone(`${name}-zone`, {
       name: domain,
-      tags: {
-        ...tags,
-      },
+      ...zoneArgs,
     }, { parent: this })
 
     records.map((record, index) => (
