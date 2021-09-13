@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.0](https://github.com/materya/pulumi/compare/v4.2.2...v4.3.0) (2021-09-13)
+
+
+### Features
+
+* **postgresql:** repmgrPassword persistent argument ([8bd2b0e](https://github.com/materya/pulumi/commit/8bd2b0efea4760e4dab0b1abde71d03de66d8dd5))
+* **postgresql:** update schema grant management ([6e53b81](https://github.com/materya/pulumi/commit/6e53b81d170301e7d2fea37bd295abf70a6cca68))
+
+
+### Bug Fixes
+
+* **cloudfront:** weird TS compilation error ([cb8079b](https://github.com/materya/pulumi/commit/cb8079bc35ab95b865589f9700d3b97bf07c7cf7))
+* upgrade dependencies ([0c3bbb3](https://github.com/materya/pulumi/commit/0c3bbb3d9b08c4224f146f47cdb94b6947a02196))
+
 ### [4.2.2](https://github.com/materya/pulumi/compare/v4.2.1...v4.2.2) (2021-03-02)
 
 
