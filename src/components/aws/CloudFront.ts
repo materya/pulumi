@@ -17,13 +17,17 @@ export interface CloudFrontArgs {
 export class CloudFront extends pulumi.ComponentResource {
   public readonly cloudFrontDomain: pulumi.Output<string>
 
+  public readonly cloudFrontId: pulumi.Output<string>
+
+  public readonly cloudFrontArn: pulumi.Output<string>
+
   public readonly logsBucketName?: pulumi.Output<string>
 
   public readonly oaiArn: pulumi.Output<string>
 
   public readonly targetDomain: pulumi.Output<string>
 
-  constructor (
+  constructor(
     name: string,
     args: CloudFrontArgs,
     opts?: pulumi.ComponentResourceOptions,
@@ -148,12 +152,16 @@ export class CloudFront extends pulumi.ComponentResource {
     ))
 
     this.cloudFrontDomain = distribution.domainName
+    this.cloudFrontId = distribution.id
+    this.cloudFrontArn = distribution.arn
     this.logsBucketName = logsBucket?.bucket
     this.oaiArn = oai.iamArn
     this.targetDomain = pulumi.interpolate`https://${bucket.bucket}`
 
     this.registerOutputs({
       cloudFrontDomain: this.cloudFrontDomain,
+      cloudFrontId: this.cloudFrontId,
+      cloudFrontArn: this.cloudFrontArn,
       logsBucketName: this.logsBucketName,
       oaiArn: this.oaiArn,
       targetDomain: this.targetDomain,
