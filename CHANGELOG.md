@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.5.0](https://github.com/materya/pulumi/compare/v4.4.1...v4.5.0) (2021-11-19)
+
+
+### Features
+
+* add cloudfront arn and id in output  ([a110526](https://github.com/materya/pulumi/commit/a110526aaf3e49bfc1759951b65f94e416f0de02))
+
 ### [4.4.1](https://github.com/materya/pulumi/compare/v4.4.0...v4.4.1) (2021-09-14)
 
 ## [4.4.0](https://github.com/materya/pulumi/compare/v4.3.0...v4.4.0) (2021-09-13)
