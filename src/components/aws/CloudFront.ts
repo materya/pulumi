@@ -27,7 +27,7 @@ export class CloudFront extends pulumi.ComponentResource {
 
   public readonly targetDomain: pulumi.Output<string>
 
-  constructor(
+  constructor (
     name: string,
     args: CloudFrontArgs,
     opts?: pulumi.ComponentResourceOptions,
