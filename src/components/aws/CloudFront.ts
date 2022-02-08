@@ -12,6 +12,7 @@ export interface CloudFrontArgs {
   logs?: boolean
   ttl?: number
   zoneId: pulumi.Input<string>
+  trustedKeyGroups?: pulumi.Input<string>[]
 }
 
 export class CloudFront extends pulumi.ComponentResource {
@@ -47,6 +48,7 @@ export class CloudFront extends pulumi.ComponentResource {
       ],
       logs = false,
       ttl = 600,
+      trustedKeyGroups = undefined,
     } = args
 
     let logsBucket: aws.s3.Bucket | undefined
@@ -67,7 +69,11 @@ export class CloudFront extends pulumi.ComponentResource {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const distributionArgs: aws.cloudfront.DistributionArgs = pulumi
-      .all([oai.cloudfrontAccessIdentityPath]).apply(([oaiPath]) => ({
+      .all([
+        oai.cloudfrontAccessIdentityPath,
+        ...(trustedKeyGroups || []),
+      ])
+      .apply(([oaiPath, ...keyGroups]) => ({
         enabled: true,
         aliases,
 
@@ -105,6 +111,10 @@ export class CloudFront extends pulumi.ComponentResource {
           minTtl: 0,
           defaultTtl: ttl,
           maxTtl: ttl,
+
+          ...(keyGroups.length > 0 && {
+            trustedKeyGroups: keyGroups,
+          }),
         },
 
         // "All" is the most broad distribution, and also the most expensive.
