@@ -1,91 +1,51 @@
 #!make
 
-TAG = $(shell git describe --tags | sed -e 's/^v//')
+PM = npm
+PMCMD = run
+RM = rm
 
 PRERELEASE_TAG ?= rc
 PUBLISH_FLAGS = publish --access public
 
-PACKAGE_LOCK = package-lock.json
-COVERAGE = .nyc_output coverage
-SRC = src
+MODULES = node_modules
 DIST = dist
-MODULES = node_modules node_modules/.bin
+COVERAGE = .nyc_output coverag
 
-DOCKER_SERVICE = dev
-D = docker
-DC = docker-compose
-DCFLAGS = --rm ${DOCKER_SERVICE}
-
-PM = $(DC) run $(DCFLAGS) npm
-RM = $(DC) run $(DCFLAGS) rm
-ifneq "$(or $(wildcard /.dockerenv), $(CI))" ""
-	PM = npm
-	RM = rm
-endif
-
-all: $(DIST)
 .PHONY: all
+all: clean dist #test
 
-$(MODULES):
-	$(PM) ci
+dist:
+	$(PM) $(PMCMD) build
 
-$(DIST): $(MODULES)
-	$(PM) run build
-
-coverage:
-	$(PM) run coverage
-
-package-lock.json:
-	$(PM) i
-
-clean:
-	$(RM) -rf $(DIST)
-.PHONY: clean
-
-clean-coverage:
-	$(RM) -rf $(COVERAGE)
-.PHONY: clean-coverage
-
-clean-modules:
-	$(RM) -rf $(MODULES)/*
-	$(RM) $(PACKAGE_LOCK)
-.PHONY: clean-modules
-
-clean-all: clean clean-modules clean-coverage
-.PHONY: clean-all
-
-test: $(MODULES)
-	$(PM) t
 .PHONY: test
+test:
+	$(PM) $(PMCMD) test
 
-container: package-lock.json
-	$(DC) build ${DOCKER_SERVICE}
-.PHONY: container
+.PHONY: clean
+clean:
+	rm -rf dist
+	rm -rf coverage
+	rm -rf .tmp
+	rm -rf .nyc_output
 
-shell:
-ifneq (,$(wildcard /.dockerenv))
-	bash
-else
-	$(DC) run $(DCFLAGS) bash
-endif
-.PHONY: shell
-
-release:
-ifneq (,$(findstring n,$(MAKEFLAGS)))
-	+npx standard-version -s --dry-run
-	+npm $(PUBLISH_FLAGS) --dry-run
-else
-	npx standard-version -s
-	+npm $(PUBLISH_FLAGS)
-endif
 .PHONY: release
-
-prerelease:
+release: clean $(DIST)
 ifneq (,$(findstring n,$(MAKEFLAGS)))
-	+npx standard-version -s --prerelease $(PRERELEASE_TAG) --dry-run
-	+npm $(PUBLISH_FLAGS) --tag $(PRERELEASE_TAG) --dry-run
+	+$(PM) run release -- --dry-run
+	+$(PM) $(PUBLISH_FLAGS) --dry-run
 else
-	npx standard-version -s --prerelease $(PRERELEASE_TAG)
-	+npm $(PUBLISH_FLAGS) --tag $(PRERELEASE_TAG)
+	$(PM) run release
+	git push --follow-tags
+	$(PM) $(PUBLISH_FLAGS)
 endif
+
 .PHONY: prerelease
+prerelease: clean $(DIST)
+ifneq (,$(findstring n,$(MAKEFLAGS)))
+	+$(PM) run release -- --prerelease $(PRERELEASE_TAG) --dry-run
+	+$(PM) $(PUBLISH_FLAGS) --tag $(PRERELEASE_TAG) --dry-run
+else
+	$(PM) run release -- --prerelease $(PRERELEASE_TAG)
+	git push --follow-tags
+	$(PM) $(PUBLISH_FLAGS) --tag $(PRERELEASE_TAG)
+endif
