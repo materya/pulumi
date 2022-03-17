@@ -125,7 +125,10 @@ export class Privileges extends pulumi.ComponentResource {
     } = args
 
     this.defaultPrivileges = (Object.keys(privileges) as Array<ObjectType>)
-      .filter(objectType => objectType !== 'database')
+      .filter(objectType => (
+        objectType !== 'database'
+        && objectType !== 'schema'
+      ))
       .map(objectType => (
         new postgresql.DefaultPrivileges(`${name}-default-${objectType}`, {
           database,
