@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.6.2](https://github.com/materya/pulumi/compare/v4.6.1...v4.6.2) (2022-03-22)
+
+
+### Bug Fixes
+
+* exclude unsupported schema object_type in DefaultPrivileges ([f2b3c7f](https://github.com/materya/pulumi/commit/f2b3c7fb1d6c2966b00e6c2d43114b76e634deb1))
+
 ### [4.6.1](https://github.com/materya/pulumi/compare/v4.6.0...v4.6.1) (2022-02-08)
 
 ## [4.6.0](https://github.com/materya/pulumi/compare/v4.5.1...v4.6.0) (2022-02-08)
