@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.7.0](https://github.com/materya/pulumi/compare/v4.6.2...v4.7.0) (2022-06-02)
+
+
+### Features
+
+* all to pass version and tag to external and add random string in name ([ac981d5](https://github.com/materya/pulumi/commit/ac981d585112aca803e72166e9eec968129d5657))
+
 ### [4.6.2](https://github.com/materya/pulumi/compare/v4.6.1...v4.6.2) (2022-03-22)
 
 
