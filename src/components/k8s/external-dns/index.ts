@@ -2,6 +2,7 @@ import * as aws from '@pulumi/aws'
 import * as gcp from '@pulumi/gcp'
 import * as k8s from '@pulumi/kubernetes'
 import * as pulumi from '@pulumi/pulumi'
+import * as random from '@pulumi/random'
 
 import type { CloudProvider } from '@materya/pulumi'
 
@@ -13,6 +14,8 @@ export interface ExternalDnsArgs {
   domain: pulumi.Input<string>
   labels: pulumi.Input<Record<string, pulumi.Input<string>>>
   namespace?: string
+  version?: string
+  imageTag?: string
   nodeSelector?: Record<string, string>
   provider: CloudProvider
   providerArgs?: {
@@ -37,6 +40,8 @@ export class ExternalDNS extends pulumi.ComponentResource {
 
     const namespaceName = args.namespace ?? 'external-dns'
     const serviceAccountName = args.serviceAccountName ?? `${name}-sa`
+    const version = args.version ?? '6.5.1'
+    const imageTag = args.imageTag ?? '0.12.0'
 
     const namespace = new k8s.core.v1.Namespace(`${name}-namespace`, {
       metadata: {
@@ -64,15 +69,33 @@ export class ExternalDNS extends pulumi.ComponentResource {
       awsAssumeRole = irsa.role
     }
 
+    const { result: nameOverride } = new random.RandomString(
+      `${name}-id`,
+      {
+        length: 4,
+        special: false,
+        upper: false,
+        keepers: {
+          imageTag,
+          version,
+        },
+      },
+      { parent: this },
+    )
+
     const _chart = new k8s.helm.v2.Chart(name, {
       fetchOpts: {
         repo: 'https://charts.bitnami.com/bitnami',
       },
-      version: '2.22.1',
+      version,
       chart: 'external-dns',
       namespace: namespaceName,
       values: {
         provider: args.provider,
+        nameOverride,
+        image: {
+          tag: imageTag,
+        },
         ...(args.provider === 'aws' && {
           aws: {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
