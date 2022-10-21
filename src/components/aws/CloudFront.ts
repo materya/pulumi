@@ -11,6 +11,7 @@ export interface CloudFrontArgs {
   >[]
   logs?: boolean
   ttl?: number
+  useRegionalDomainName?: boolean
   zoneId: pulumi.Input<string>
   trustedKeyGroups?: pulumi.Input<string>[]
 }
@@ -49,6 +50,7 @@ export class CloudFront extends pulumi.ComponentResource {
       logs = false,
       ttl = 600,
       trustedKeyGroups = undefined,
+      useRegionalDomainName = false,
     } = args
 
     let logsBucket: aws.s3.Bucket | undefined
@@ -80,7 +82,8 @@ export class CloudFront extends pulumi.ComponentResource {
         // We only specify one origin for this distribution, the S3 bucket.
         origins: [
           {
-            domainName: bucket.bucketDomainName,
+            domainName: useRegionalDomainName
+              ? bucket.bucketRegionalDomainName : bucket.bucketDomainName,
             originId: bucket.arn,
             s3OriginConfig: {
               originAccessIdentity: oaiPath,
