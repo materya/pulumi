@@ -10,7 +10,11 @@ export interface CloudFrontArgs {
     cloudfront.DistributionCustomErrorResponse
   >[]
   logs?: boolean
+  // deprecated, use defaultTtl and maxTtl
   ttl?: number
+  defaultTtl?: number
+  maxTtl?: number
+  minTtl?: number
   useRegionalDomainName?: boolean
   zoneId: pulumi.Input<string>
   trustedKeyGroups?: pulumi.Input<string>[]
@@ -48,9 +52,13 @@ export class CloudFront extends pulumi.ComponentResource {
         },
       ],
       logs = false,
-      ttl = 600,
       trustedKeyGroups = undefined,
       useRegionalDomainName = false,
+      ttl = 600,
+      // Backward compatibility, set to ttl by default
+      minTtl = 0,
+      defaultTtl = ttl,
+      maxTtl = ttl,
     } = args
 
     let logsBucket: aws.s3.Bucket | undefined
@@ -111,9 +119,9 @@ export class CloudFront extends pulumi.ComponentResource {
             queryString: false,
           },
 
-          minTtl: 0,
-          defaultTtl: ttl,
-          maxTtl: ttl,
+          minTtl,
+          defaultTtl,
+          maxTtl,
 
           ...(keyGroups.length > 0 && {
             trustedKeyGroups: keyGroups,
