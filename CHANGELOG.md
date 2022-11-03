@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.8.0-rc.1](https://github.com/materya/pulumi/compare/v4.7.1...v4.8.0-rc.1) (2022-11-03)
+
+
+### Features
+
+* add helpers for automatic tagging ([acd5e37](https://github.com/materya/pulumi/commit/acd5e37d1152ec923eb755a73ba25202b889dd5d))
+* allow finer cloudfront TTL configuration ([5043e47](https://github.com/materya/pulumi/commit/5043e47fd4f9193d26d924af515149f37e7a8dec))
+
+
+### Bug Fixes
+
+* allow to tag aws certificates ([9fcaf44](https://github.com/materya/pulumi/commit/9fcaf44343ff72b1d1e643e7b628f7be613c738e))
+* allow using s3 regional domain name to prevent redirect issues ([87d7a13](https://github.com/materya/pulumi/commit/87d7a13da2391933b372b8d42dd79dba6e153647))
+
 ### [4.7.1](https://github.com/materya/pulumi/compare/v4.7.0...v4.7.1) (2022-08-01)
 
 ## [4.7.0](https://github.com/materya/pulumi/compare/v4.6.2...v4.7.0) (2022-06-02)
