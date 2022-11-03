@@ -78,81 +78,76 @@ export class CloudFront extends pulumi.ComponentResource {
     // TODO: Weird incompatible type compilation. To fix
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const distributionArgs: aws.cloudfront.DistributionArgs = pulumi
-      .all([
-        oai.cloudfrontAccessIdentityPath,
-        ...(trustedKeyGroups || []),
-      ])
-      .apply(([oaiPath, ...keyGroups]) => ({
-        enabled: true,
-        aliases,
+    const distributionArgs: aws.cloudfront.DistributionArgs = {
+      enabled: true,
+      aliases,
 
-        // We only specify one origin for this distribution, the S3 bucket.
-        origins: [
-          {
-            domainName: useRegionalDomainName
-              ? bucket.bucketRegionalDomainName : bucket.bucketDomainName,
-            originId: bucket.arn,
-            s3OriginConfig: {
-              originAccessIdentity: oaiPath,
-            },
-            // customOriginConfig: {
-            //   originProtocolPolicy: 'http-only',
-            //   httpPort: 80,
-            //   httpsPort: 443,
-            //   originSslProtocols: ['TLSv1.2'],
-            // },
+      // We only specify one origin for this distribution, the S3 bucket.
+      origins: [
+        {
+          domainName: useRegionalDomainName
+            ? bucket.bucketRegionalDomainName : bucket.bucketDomainName,
+          originId: bucket.arn,
+          s3OriginConfig: {
+            originAccessIdentity: oai.cloudfrontAccessIdentityPath,
           },
-        ],
+          // customOriginConfig: {
+          //   originProtocolPolicy: 'http-only',
+          //   httpPort: 80,
+          //   httpsPort: 443,
+          //   originSslProtocols: ['TLSv1.2'],
+          // },
+        },
+      ],
 
-        defaultRootObject: 'index.html',
+      defaultRootObject: 'index.html',
 
-        defaultCacheBehavior: {
-          targetOriginId: bucket.arn,
+      defaultCacheBehavior: {
+        targetOriginId: bucket.arn,
 
-          viewerProtocolPolicy: 'redirect-to-https',
-          allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
-          cachedMethods: ['GET', 'HEAD', 'OPTIONS'],
+        viewerProtocolPolicy: 'redirect-to-https',
+        allowedMethods: ['GET', 'HEAD', 'OPTIONS'],
+        cachedMethods: ['GET', 'HEAD', 'OPTIONS'],
 
-          forwardedValues: {
-            cookies: { forward: 'none' },
-            queryString: false,
-          },
-
-          minTtl,
-          defaultTtl,
-          maxTtl,
-
-          ...(keyGroups.length > 0 && {
-            trustedKeyGroups: keyGroups,
-          }),
+        forwardedValues: {
+          cookies: { forward: 'none' },
+          queryString: false,
         },
 
-        // "All" is the most broad distribution, and also the most expensive.
-        // "100" is the least broad, and also the least expensive.
-        priceClass: 'PriceClass_100',
+        minTtl,
+        defaultTtl,
+        maxTtl,
 
-        customErrorResponses,
-
-        restrictions: {
-          geoRestriction: {
-            restrictionType: 'none',
-          },
-        },
-
-        viewerCertificate: {
-          acmCertificateArn: certificateArn,
-          sslSupportMethod: 'sni-only',
-        },
-
-        ...(logsBucket && {
-          loggingConfig: {
-            bucket: logsBucket.bucketDomainName,
-            includeCookies: false,
-            prefix: pulumi.interpolate`${bucket.bucket}/`,
-          },
+        ...(trustedKeyGroups && trustedKeyGroups.length > 0 && {
+          trustedKeyGroups,
         }),
-      }))
+      },
+
+      // "All" is the most broad distribution, and also the most expensive.
+      // "100" is the least broad, and also the least expensive.
+      priceClass: 'PriceClass_100',
+
+      customErrorResponses,
+
+      restrictions: {
+        geoRestriction: {
+          restrictionType: 'none',
+        },
+      },
+
+      viewerCertificate: {
+        acmCertificateArn: certificateArn,
+        sslSupportMethod: 'sni-only',
+      },
+
+      ...(logsBucket && {
+        loggingConfig: {
+          bucket: logsBucket.bucketDomainName,
+          includeCookies: false,
+          prefix: pulumi.interpolate`${bucket.bucket}/`,
+        },
+      }),
+    }
 
     const distribution = new aws.cloudfront.Distribution(
       `${name}-distribution`,
