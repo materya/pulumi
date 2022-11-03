@@ -5,6 +5,9 @@ export interface CertificateArgs {
   zoneId: pulumi.Input<string>
   hostname: pulumi.Input<string>
   aliases?: Array<string | pulumi.Input<string>>
+  tags?: pulumi.Input<{
+    [key: string]: pulumi.Input<string>
+  }>
 }
 
 export class Certificate extends pulumi.ComponentResource {
@@ -16,6 +19,8 @@ export class Certificate extends pulumi.ComponentResource {
     opts?: pulumi.ComponentResourceOptions,
   ) {
     super('materya:aws:Certificate', name, {}, opts)
+
+    const { tags = {} } = args
 
     /**
      * Custom Provider.
@@ -39,6 +44,7 @@ export class Certificate extends pulumi.ComponentResource {
       domainName: args.hostname,
       subjectAlternativeNames: args.aliases,
       validationMethod: 'DNS',
+      tags,
     }, { parent: this, provider: eastRegionProvider })
 
     /**
