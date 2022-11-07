@@ -69,7 +69,7 @@ export class ClusterIssuer extends pulumi.CustomResource {
     opts?: pulumi.CustomResourceOptions,
   ) {
     const inputs = {
-      apiVersion: 'cert-manager.io/v1alpha2',
+      apiVersion: args?.apiVersion ?? 'cert-manager.io/v1alpha2',
       kind: 'ClusterIssuer',
       metadata: args?.metadata ?? undefined,
       spec: args?.spec ?? undefined,
