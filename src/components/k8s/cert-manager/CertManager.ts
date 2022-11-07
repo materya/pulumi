@@ -12,6 +12,7 @@ export interface CertManagerArgs {
   staging?: pulumi.Input<boolean>
   repository?: pulumi.Input<string>
   version?: pulumi.Input<string>
+  issuerApiVersion?: pulumi.Input<string>
 }
 
 export class CertManager extends pulumi.ComponentResource {
@@ -80,6 +81,7 @@ export class CertManager extends pulumi.ComponentResource {
     )
 
     this.issuer = new ClusterIssuer(`${name}-issuer`, {
+      apiVersion: args.issuerApiVersion,
       metadata: {
         name: `${name}-issuer`,
       },
