@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.9.0](https://github.com/materya/pulumi/compare/v4.8.0...v4.9.0) (2022-11-14)
+
+
+### Features
+
+* issuer api version configuration ([cda03de](https://github.com/materya/pulumi/commit/cda03dea2e22db3167d771eb7daf4bcaf79536a8))
+
 ## [4.8.0](https://github.com/materya/pulumi/compare/v4.7.1...v4.8.0) (2022-11-04)
 
 
