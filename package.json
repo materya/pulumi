@@ -47,7 +47,7 @@
     "@types/nunjucks": "3.1.4",
     "minimatch": "3.0.5",
     "nunjucks": "3.2.3",
-    "typescript": "4.2.3"
+    "typescript": "4.8.4"
   },
   "peerDependencies": {
     "@pulumi/aws": "^5.0.0",
@@ -60,17 +60,17 @@
     "@pulumi/random": "^4.0.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "4.19.0",
-    "@typescript-eslint/parser": "4.19.0",
+    "@typescript-eslint/eslint-plugin": "5.42.1",
+    "@typescript-eslint/parser": "5.42.1",
     "codecov": "3.8.1",
     "cross-env": "7.0.3",
-    "eslint": "7.22.0",
-    "eslint-config-materya": "7.1.1",
-    "eslint-plugin-jsdoc": "32.3.0",
+    "eslint": "8.27.0",
+    "eslint-config-materya": "9.0.2",
+    "eslint-plugin-jsdoc": "39.6.2",
     "npm-run-all": "4.1.5",
-    "snyk": "1.765.0",
+    "snyk": "1.1058.0",
     "standard-version": "9.3.2",
     "tsutils": "3.21.0",
-    "typedoc": "0.22.11"
+    "typedoc": "0.23.21"
   }
 }

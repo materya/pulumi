@@ -85,6 +85,7 @@ export class ServiceAccount extends pulumi.ComponentResource {
       metadata: {
         name: this.name,
         annotations: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           'kubernetes.io/service-account.name': this.name,
         },
       },

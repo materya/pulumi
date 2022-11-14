@@ -78,12 +78,14 @@ export class Ingress extends pulumi.ComponentResource {
         metadata: {
           name,
           annotations: {
+            /* eslint-disable @typescript-eslint/naming-convention */
             'dns.alpha.kubernetes.io/external': 'true', // external-dns
             'kubernetes.io/tls-acme': 'true', // cert-manager
             ...(args.customClass && {
               'kubernetes.io/ingress.class': args.customClass,
             }),
             ...args.annotations,
+            /* eslint-enable @typescript-eslint/naming-convention */
           },
         },
         spec: {
